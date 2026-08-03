@@ -19,9 +19,9 @@ function App(){
   </aside>
   <main>
    <header><button className="menu" onClick={()=>setMobile(true)}><Menu/></button><div><span className="eyebrow">2026 EXAM FORECAST</span><h1>行政書士試験 <em>AI予測分析</em></h1></div><div className="header-stat"><Database/><span>解析済み<strong>360 Questions</strong></span></div></header>
-   {tab==='予測レポート'&&<Forecast filtered={filtered} subject={subject} setSubject={setSubject}/>} 
+   {tab==='予測レポート'&&<Forecast filtered={filtered} subject={subject} setSubject={setSubject}/>}
    {tab==='出題分析'&&<Analysis/>}
-   {tab==='予想問題'&&<Questions openQ={openQ} setOpenQ={setOpenQ}/>} 
+   {tab==='予想問題'&&<Questions openQ={openQ} setOpenQ={setOpenQ}/>}
   </main>
  </div>
 }
