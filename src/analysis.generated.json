@@ -1,0 +1,53 @@
+{
+  "methodVersion": "1.0",
+  "sources": [
+    {
+      "year": "R2",
+      "pages": 50,
+      "questions": 60,
+      "characters": 8976,
+      "readableRatio": 0.001,
+      "mode": "structure-assisted"
+    },
+    {
+      "year": "R3",
+      "pages": 50,
+      "questions": 60,
+      "characters": 9862,
+      "readableRatio": 0.001,
+      "mode": "structure-assisted"
+    },
+    {
+      "year": "R4",
+      "pages": 47,
+      "questions": 60,
+      "characters": 9362,
+      "readableRatio": 0.005,
+      "mode": "structure-assisted"
+    },
+    {
+      "year": "R5",
+      "pages": 46,
+      "questions": 60,
+      "characters": 9191,
+      "readableRatio": 0.002,
+      "mode": "structure-assisted"
+    },
+    {
+      "year": "R6",
+      "pages": 46,
+      "questions": 60,
+      "characters": 8659,
+      "readableRatio": 0.002,
+      "mode": "structure-assisted"
+    },
+    {
+      "year": "R7",
+      "pages": 46,
+      "questions": 60,
+      "characters": 33359,
+      "readableRatio": 1,
+      "mode": "full-text"
+    }
+  ]
+}
