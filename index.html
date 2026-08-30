@@ -1,1 +1,46 @@
-<!doctype html><html lang="ja"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><meta name="description" content="過去問データから行政書士試験の学習優先度を分析するAI予測ダッシュボード"/><title>GYOSAI | 行政書士試験 AI予測</title><script async src="https://www.googletagmanager.com/gtag/js?id=G-B7JKBTJ3RR"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-B7JKBTJ3RR');</script></head><body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body></html>
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta name="description" content="令和2〜7年度の行政書士本試験の問題冊子をもとに、科目別の出題数、抽出品質、論点の横断性を可視化する学習支援ダッシュボードです。" />
+    <link rel="canonical" href="https://syunnjack.github.io/gyosei-yosou/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://syunnjack.github.io/gyosei-yosou/" />
+    <meta property="og:site_name" content="GYOSAI" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:title" content="GYOSAI | 行政書士試験 AI予測" />
+    <meta property="og:description" content="令和2〜7年度の本試験問題をもとに、科目別の出題数と抽出品質を可視化する学習支援ダッシュボードです。" />
+    <title>GYOSAI | 行政書士試験 AI予測</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B7JKBTJ3RR"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-B7JKBTJ3RR');</script>
+  </head>
+  <body>
+    <!--
+      #root の中身は、JavaScript が動くと React に置き換わる。
+      置き換わる前のHTMLにも本文を入れておくことで、JavaScript を実行しない相手
+      （一部のクローラーや読み上げ環境）にも、何を見られるサイトなのかが伝わる。
+    -->
+    <div id="root">
+      <main>
+        <h1>行政書士試験 出題データの可視化</h1>
+        <p>令和2年度から令和7年度までの行政書士本試験の問題冊子を読み取り、科目ごとの出題数や論点の偏りを一覧にした学習支援ダッシュボードです。どの科目にどれだけ時間を割くかを決める材料として使えます。</p>
+
+        <h2>見られるもの</h2>
+        <ul>
+          <li><strong>科目別・年間出題数</strong> — 6年分について、科目ごとに何問出ていたかを並べています</li>
+          <li><strong>6年分の出題構造</strong> — 年度をまたいだ配分の変化を確認できます</li>
+          <li><strong>重点学習ランキング</strong> — 出題数の多さをもとにした学習優先度の目安です</li>
+          <li><strong>データソース品質</strong> — 年度ごとに、PDFからどれだけ本文を読み取れたかを載せています</li>
+        </ul>
+
+        <h2>数値の扱いについて</h2>
+        <p>元データは各年度の本試験問題冊子（PDF）です。<strong>令和2〜6年度はPDF内の文字情報に不整合があり、全文ではなく構造の解析にとどめています。</strong>全文を読み取れているのは令和7年度だけです。どの年度がどちらの扱いかは、サイト内の「データソース品質」に明記しています。</p>
+        <p><strong>「重点学習ランキング」や予想は、過去の出題数から計算した学習優先度の目安であり、実際の出題を保証するものではありません。</strong>試験の範囲・配点・実施要領は、必ず一般財団法人行政書士試験研究センターの公式発表で確認してください。</p>
+
+        <p><small>当サイトは個人が作成した学習支援ツールで、試験実施団体とは関係ありません。</small></p>
+      </main>
+    </div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
