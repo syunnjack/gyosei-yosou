@@ -319,6 +319,27 @@ upsert('pages', 'about', '運営者情報', '''
 <li>学習環境：スタディング行政書士講座（通信）＋ LEC・伊藤塾・TAC・東京法経学院の模試13回（自宅受験）＋ 市販予想模試</li>
 <li>記録方針：模試・本試験の得点はすべて本人の実際の結果を、良い数字も悪い数字もそのまま掲載します。推定の日付は「要確認」と明記します</li>
 </ul>
+<h2>行政書士以外の資格受験履歴</h2>
+<p>行政書士は「4回目」ですが、資格試験そのものは初めてではありません。合格したものも、途中で断念したものもそのまま書きます。</p>
+<div class="gy-scroll"><table class="gy-score" style="table-layout:auto">
+<tr><th style="white-space:normal">時期</th><th>資格</th><th>結果</th></tr>
+<tr class="pass"><td style="white-space:normal;min-width:7em">大学中退後</td><td style="white-space:normal;text-align:left">測量士補（国家資格）<br><small>初めて受けた国家資格。その後、測量事務所に勤務</small></td><td class="ok">合格（1回）</td></tr>
+<tr><td style="white-space:normal;min-width:7em">測量事務所 勤務中</td><td style="white-space:normal;text-align:left">土地家屋調査士（国家資格）<br><small>東京法経学院の通学講座に申し込み、しばらく通学したが挫折</small></td><td class="ng">断念</td></tr>
+<tr class="pass"><td style="white-space:normal;min-width:7em">マンション管理会社 勤務中</td><td style="white-space:normal;text-align:left">マンション管理士（国家資格）<br><small>国家資格として最初に実施された年（2001年度）に受験したと記憶</small></td><td class="ok">合格</td></tr>
+<tr class="pass"><td style="white-space:normal;min-width:7em">同</td><td style="white-space:normal;text-align:left">管理業務主任者（国家資格）<br><small>マンション管理会社に約10年勤務</small></td><td class="ok">合格</td></tr>
+<tr class="pass"><td style="white-space:normal;min-width:7em">同</td><td style="white-space:normal;text-align:left">宅地建物取引士（宅建・国家資格）</td><td class="ok">合格</td></tr>
+<tr class="pass"><td style="white-space:normal;min-width:7em">退職後・公共職業訓練<br><small>（ネットワーク養成科・3か月）</small></td><td style="white-space:normal;text-align:left">CCNA（ベンダー資格）<br><small>訓練期間中に取得。その後IT業界へ転職し、現在に至る</small></td><td class="ok">合格</td></tr>
+<tr class="pass"><td style="white-space:normal;min-width:7em">同</td><td style="white-space:normal;text-align:left">LPIC レベル1（ベンダー資格）</td><td class="ok">合格</td></tr>
+<tr><td style="white-space:normal;min-width:7em">IT業界 勤務中〜現在</td><td style="white-space:normal;text-align:left">行政書士（国家資格）<br><small>4回目（2026年11月8日）に向けて学習中。<a href="/results/">成績の推移</a></small></td><td class="ng">1回目 足切り → 152点 → 168点</td></tr>
+</table></div>
+<h2>資格に対する考え方</h2>
+<ul>
+<li><strong>国家資格、特に業務独占・名称独占のある資格は取ったほうがいい</strong>と考えています。行政書士に挑戦し続けている理由もここにあります。</li>
+<li>民間資格・ベンダー資格は「知識の確認」程度。テキストをパラパラ見て弱点を確認できれば十分で、取得そのものを目的にはしません。</li>
+<li>ITで本当に重要なのは「作りたいものを作れるか」「トラブルやエラーが出たときに自分で対処できるか」。知っているだけでは意味がない、というのが実務での実感です。</li>
+<li>Claude Code や Devin などの登場で、私のようにITスキルの高くない人間でも、趣味程度なら個人開発の真似事ができる時代になりました（このサイトもその一つです）。もちろんセキュリティやITの基礎は知っているに越したことはありません。</li>
+<li>行政書士試験も含めて、今後は趣味や旅行を楽しみつつ、穏やかで後悔のない残りの人生を送りたい——資格はそのための手段だと考えています。</li>
+</ul>
 <h2>このサイトで扱わないこと</h2>
 <p>合格を保証する勉強法の断定、講座・教材の優劣の断定はしません。掲載する講座・教材は実際に使用したものだけです。</p>
 <h2>情報の出典</h2>

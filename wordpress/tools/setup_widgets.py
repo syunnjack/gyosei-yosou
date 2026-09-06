@@ -11,6 +11,7 @@ A = BASE + '/wp-json/wp/v2'
 
 PROFILE = ('<div class="gy-profile"><p><strong>4回目の行政書士受験生</strong></p><p>令和5年度152点 → 令和6年度168点（あと12点）。'
            'スタディング受講中、模試13回（自宅受験）と市販予想模試の自己採点を全公開。</p>'
+           '<p><small>保有資格：測量士補・マンション管理士・管理業務主任者・宅建士・CCNA・LPIC-1（IT業界勤務）</small></p>'
            '<p><a href="/about/">運営者情報</a>／<a href="/mock-exams/">模試の記録</a></p></div>')
 
 
