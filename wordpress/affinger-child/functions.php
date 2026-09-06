@@ -71,6 +71,22 @@ function gy_adsense_head() {
 }
 add_action( 'wp_head', 'gy_adsense_head', 5 );
 
+/**
+ * http:// でのアクセスを https:// に301リダイレクト（home_url が https の場合のみ）
+ */
+function gy_force_https() {
+	if ( is_ssl() || is_admin() || wp_doing_ajax() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+		return;
+	}
+	if ( strpos( home_url(), 'https://' ) !== 0 || empty( $_SERVER['HTTP_HOST'] ) ) {
+		return;
+	}
+	$uri = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '/';
+	wp_redirect( 'https://' . $_SERVER['HTTP_HOST'] . $uri, 301 );
+	exit;
+}
+add_action( 'template_redirect', 'gy_force_https', 1 );
+
 // [gy_ad slot="1234567890" format="auto"] — 記事内の任意位置に広告ユニットを置く
 function gy_ad_shortcode( $atts ) {
 	$a = shortcode_atts( array( 'slot' => '', 'format' => 'auto', 'label' => 'スポンサーリンク' ), $atts );
