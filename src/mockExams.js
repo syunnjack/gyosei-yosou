@@ -47,6 +47,7 @@ export const mockExams = [
 // 過去の本試験・模試（積み上げログの成績表記事から抽出）。kind: 'exam' 本試験 / 'mock' 模試 / 'self' 自己採点
 // 内訳が成績表に無いものは null（合計のみ）。
 export const pastResults = [
+  { id: 'first-exam', kind: 'exam', date: '', title: '1回目 本試験（200字論述の時代）', scores: null, total: null, note: '一般知識の足切りで不合格（採点対象外）。年度・点数の記録なし。' },
   { id: 'r5-exam', kind: 'exam', date: '2023-11-12', title: '令和5年度 本試験（2回目）', scores: { law5: 84, lawMulti: 8, written: 16, general: 44 }, note: '足切りは通過。152点で不合格（合格点まで28点）。' },
   { id: 'thg-2024-1', kind: 'mock', date: '2024-09-19', title: '東京法経学院 2024 第1回（自宅）', scores: null, total: null, note: '法令択一 29/40問。基礎知識は文章理解未読で足切り、記述は半分未満。' },
   { id: 'thg-2024-2', kind: 'mock', date: '2024-09-27', title: '東京法経学院 2024 第2回（自宅）', scores: null, total: 160, note: '偏差値49・56人中29位（C判定）。択一 136/216・20位、多肢＋記述 24点・37位。行政法記述は題意を読み違えて0点。' },
