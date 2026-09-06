@@ -2,7 +2,7 @@
 Theme Name: AFFINGER Child
 Template: affinger
 Description: AFFINGER6 対応（gyosei-yosou.jp カスタマイズ）
-Version: 20260906
+Version: 20260906.2
 */
 
 /* 広告枠 */
@@ -20,7 +20,9 @@ Version: 20260906
 .gy table.gy-score{width:100%;border-collapse:collapse;font-size:14px;margin:1em 0 2em}
 .gy table.gy-score th,.gy table.gy-score td{border:1px solid #e3e1da;padding:8px 10px;text-align:right;white-space:nowrap}
 .gy table.gy-score th{background:#f5f4ef;text-align:center;font-weight:700}
-.gy table.gy-score td:first-child,.gy table.gy-score th:first-child{text-align:left;white-space:normal}
+.gy table.gy-score td:first-child,.gy table.gy-score th:first-child{text-align:left;white-space:nowrap}
+.gy table.gy-log td:nth-child(2),.gy table.gy-log th:nth-child(2){text-align:left;white-space:normal;min-width:16em}
+.gy table.gy-score td small{color:#777;font-size:11px}
 .gy table.gy-score tr.pass td{background:#eef7f2}
 .gy table.gy-score td.ng{color:#c0543d;font-weight:700}
 .gy table.gy-score td.ok{color:#3c8a6b;font-weight:700}
@@ -68,4 +70,4 @@ Version: 20260906
 
 .gy .gy-lead{font-size:1.05em;line-height:1.9;border-left:4px solid #152824;padding:6px 14px;margin:0 0 1.5em;background:#faf9f5}
 .gy table.gy-matrix td{text-align:center}
-.gy table.gy-matrix td:first-child{text-align:left}
+.gy table.gy-matrix td:first-child{text-align:left;white-space:nowrap}

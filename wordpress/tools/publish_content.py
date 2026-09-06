@@ -127,7 +127,7 @@ def past_table():
     for d, t, sc, tot, note in PAST:
         cells, ok = score_cells(sc, tot)
         rows += f'<tr{" class=\"pass\"" if ok else ""}><td>{jd(d) if d != "—" else "—"}</td><td>{t}<br><small>{note}</small></td>{cells}</tr>'
-    return f'<div class="gy-scroll"><table class="gy-score">{SCORE_HEAD}{rows}</table></div><p><small>合格基準：総得点180点以上・法令等122点以上・基礎知識24点以上。緑＝基準クリア、赤＝基準未達。「未記録」は成績表に内訳が残っていない項目で、0点ではありません。</small></p>'
+    return f'<div class="gy-scroll"><table class="gy-score gy-log">{SCORE_HEAD}{rows}</table></div><p><small>合格基準：総得点180点以上・法令等122点以上・基礎知識24点以上。緑＝基準クリア、赤＝基準未達。「未記録」は成績表に内訳が残っていない項目で、0点ではありません。</small></p>'
 
 
 def mock_table():
@@ -135,7 +135,7 @@ def mock_table():
     for sid, p, title, d, note, st in MOCKS:
         rows += f'<tr><td>{jd(d)}</td><td><a href="/mock-{sid}/">{title}</a><br><small>{note}</small></td><td><span class="gy-badge {st}">{STATUS_JA[st]}</span></td><td colspan="5">{"未記録" if st != "done" else ""}</td></tr>'
     head = '<tr><th>日付<br><small>提出締切/発送</small></th><th>模試</th><th>状態</th><th>法令択一</th><th>多肢</th><th>記述</th><th>基礎知識</th><th>合計</th></tr>'
-    return f'<div class="gy-scroll"><table class="gy-score">{head}{rows}</table></div>'
+    return f'<div class="gy-scroll"><table class="gy-score gy-log">{head}{rows}</table></div>'
 
 
 def ai_table():
@@ -404,7 +404,7 @@ def mock_post(sid, p, title, d, note, st):
 {PR}
 <p class="gy-lead">{title}（自宅受験）。{note}。</p>
 <h2>得点</h2>
-<div class="gy-scroll"><table class="gy-score">{SCORE_HEAD}<tr><td>{jd(d)}</td><td>{title}</td><td colspan="4">未記録</td><td>未記録</td></tr></table></div>
+<div class="gy-scroll"><table class="gy-score gy-log">{SCORE_HEAD}<tr><td>{jd(d)}</td><td>{title}</td><td colspan="4">未記録</td><td>未記録</td></tr></table></div>
 <h2>失点の分類（択一）</h2>
 <ul><li>知識不足：</li><li>読み違い：</li><li>時間切れ：</li></ul>
 <h2>多肢選択・記述（単独で記録）</h2>
@@ -425,7 +425,7 @@ upsert('posts', 'mock-book-template', '【テンプレ】○○ 2026年度版 �
 {PR}
 <p class="gy-lead">入手経路：新品／ブックオフ中古（○○円）／ヤフオク。実施日：2026年○月○日、3時間計測。</p>
 <h2>得点</h2>
-<div class="gy-scroll"><table class="gy-score">{SCORE_HEAD}<tr><td></td><td></td><td colspan="4">未記録</td><td>未記録</td></tr></table></div>
+<div class="gy-scroll"><table class="gy-score gy-log">{SCORE_HEAD}<tr><td></td><td></td><td colspan="4">未記録</td><td>未記録</td></tr></table></div>
 <h2>失点の分類</h2>
 <ul><li>知識不足：</li><li>読み違い：</li><li>時間切れ：</li><li>法改正で正答が変わっている肢：</li></ul>
 <h2>多肢選択・記述</h2>
