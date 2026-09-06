@@ -1,19 +1,21 @@
 import { useMemo, useState } from 'react'
-import { Activity, ArrowUpRight, BarChart3, BookOpen, BrainCircuit, Check, ChevronRight, Database, FileSearch, Gauge, Menu, RotateCcw, ShieldCheck, Sparkles, Target, X } from 'lucide-react'
+import { Activity, ArrowUpRight, BarChart3, BookOpen, BrainCircuit, Check, ChevronRight, ClipboardList, Database, FileSearch, Gauge, Menu, RotateCcw, ShieldCheck, Sparkles, Target, X } from 'lucide-react'
 import { forecastQuestions, predictions, subjects, years } from './data.js'
+import MockExams from './MockExams.jsx'
 
-const tabs=['予測レポート','出題分析','予想問題']
+const tabs=['予測レポート','出題分析','予想問題','模試の記録']
+const initialTab=()=>location.hash.startsWith('#mock')?tabs[3]:tabs[0]
 
 function Sparkline({values,color}){const max=Math.max(...values);const min=Math.min(...values);const points=values.map((v,i)=>`${i*24},${22-(v-min)/(max-min||1)*14}`).join(' ');return <svg className="spark" viewBox="0 0 120 28" aria-label="6年推移"><polyline points={points} fill="none" stroke={color} strokeWidth="2"/>{values.map((v,i)=><circle key={i} cx={i*24} cy={22-(v-min)/(max-min||1)*14} r="2.5" fill={color}/>)}</svg>}
 
 function App(){
- const [tab,setTab]=useState(tabs[0]); const [subject,setSubject]=useState('すべて'); const [openQ,setOpenQ]=useState(null); const [mobile,setMobile]=useState(false)
+ const [tab,setTab]=useState(initialTab); const [subject,setSubject]=useState('すべて'); const [openQ,setOpenQ]=useState(null); const [mobile,setMobile]=useState(false)
  const filtered=useMemo(()=>subject==='すべて'?predictions:predictions.filter(p=>p.subject===subject),[subject])
  return <div className="app">
   <aside className={mobile?'side open':'side'}>
    <button className="close" onClick={()=>setMobile(false)}><X/></button>
    <div className="brand"><div className="brand-mark">G</div><div><b>GYOSAI</b><span>LEGAL EXAM INTELLIGENCE</span></div></div>
-   <nav>{tabs.map((t,i)=><button key={t} className={tab===t?'active':''} onClick={()=>{setTab(t);setMobile(false)}}>{[<Target/>,<BarChart3/>,<BookOpen/>][i]}{t}</button>)}</nav>
+   <nav>{tabs.map((t,i)=><button key={t} className={tab===t?'active':''} onClick={()=>{setTab(t);setMobile(false)}}>{[<Target/>,<BarChart3/>,<BookOpen/>,<ClipboardList/>][i]}{t}</button>)}</nav>
    <div className="model-card"><div className="pulse"><BrainCircuit/></div><span>ANALYSIS MODEL</span><strong>Gyosei Forecast v1.0</strong><p>6年分・360問を対象に、科目配分と本文信号を統合。</p><div><i/>解析ステータス: ACTIVE</div></div>
    <p className="disclaimer"><ShieldCheck/>本サービスは学習支援用です。出題を保証するものではありません。</p>
   </aside>
@@ -22,6 +24,7 @@ function App(){
    {tab==='予測レポート'&&<Forecast filtered={filtered} subject={subject} setSubject={setSubject}/>}
    {tab==='出題分析'&&<Analysis/>}
    {tab==='予想問題'&&<Questions openQ={openQ} setOpenQ={setOpenQ}/>}
+   {tab==='模試の記録'&&<MockExams/>}
   </main>
  </div>
 }
