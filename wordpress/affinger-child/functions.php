@@ -56,11 +56,38 @@ function gy_register_meta() {
 }
 add_action( 'init', 'gy_register_meta' );
 
-// AdSense: 「設定 > 一般」等ではなく wp_options の gy_adsense_client（ca-pub-xxxx）を設定すると出力される。
-// 未設定のときは何も出力しない（審査前にダミーコードを置かないため）。
+// サイト設定（REST /wp/v2/settings から編集可）
+//   gy_adsense_client   : AdSense のパブリッシャーID（ca-pub-xxxx）
+//   gy_gsc_verification : Google Search Console の google-site-verification 値
+//   gy_ga4_id           : GA4 測定ID（G-XXXXXXXXXX）
+function gy_register_settings() {
+	foreach ( array( 'gy_adsense_client', 'gy_gsc_verification', 'gy_ga4_id' ) as $k ) {
+		register_setting( 'general', $k, array(
+			'type' => 'string', 'show_in_rest' => true, 'default' => '',
+			'sanitize_callback' => 'sanitize_text_field',
+		) );
+	}
+}
+add_action( 'init', 'gy_register_settings' );
+add_action( 'rest_api_init', 'gy_register_settings' );
+
+// AdSense: 未設定のときは何も出力しない（審査前にダミーコードを置かないため）。
 function gy_adsense_client() {
 	return trim( (string) get_option( 'gy_adsense_client', '' ) );
 }
+
+function gy_verification_and_analytics_head() {
+	$v = trim( (string) get_option( 'gy_gsc_verification', '' ) );
+	if ( $v !== '' ) {
+		echo '<meta name="google-site-verification" content="' . esc_attr( $v ) . '" />' . "\n";
+	}
+	$ga = trim( (string) get_option( 'gy_ga4_id', '' ) );
+	if ( $ga !== '' && ! is_user_logged_in() && preg_match( '/^G-[A-Z0-9]+$/', $ga ) ) {
+		echo '<script async src="https://www.googletagmanager.com/gtag/js?id=' . esc_attr( $ga ) . '"></script>' . "\n";
+		echo "<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','" . esc_js( $ga ) . "');</script>\n";
+	}
+}
+add_action( 'wp_head', 'gy_verification_and_analytics_head', 1 );
 
 function gy_adsense_head() {
 	$client = gy_adsense_client();
