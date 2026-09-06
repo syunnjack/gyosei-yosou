@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { BrainCircuit, CalendarDays, CheckCircle2, ChevronRight, ClipboardList, Compass, Flag, HelpCircle, History, ShieldCheck, TrendingUp } from 'lucide-react'
-import { ATTEMPT, EXAM_DATE, MAX_SCORE, PASS_LINE, faq, isPass, lawOf, mockExams, pastResults, providers, resultTotal, strategyPost, studying, totalOf } from './mockExams.js'
+import { BrainCircuit, CalendarCheck, CalendarDays, CheckCircle2, ChevronRight, ClipboardList, Compass, Flag, HelpCircle, History, ShieldCheck, TrendingUp, XCircle } from 'lucide-react'
+import { ATTEMPT, EXAM_DATE, MAX_SCORE, PASS_LINE, aiAnalysis, faq, isPass, lawOf, mockExams, pastResults, providers, resultTotal, strategyPost, studying, totalOf, weeklyPlan } from './mockExams.js'
 
 const SITE = 'https://syunnjack.github.io/gyosei-yosou/'
 const providerOf = id => providers.find(p => p.id === id)
@@ -37,6 +37,28 @@ function TrendChart({ done }) {
   </svg>
 }
 
+const md = d => `${+d.slice(5, 7)}/${+d.slice(8)}`
+const addDays = (d, n) => { const t = new Date(d); t.setDate(t.getDate() + n); return t.toISOString().slice(0, 10) }
+const PLAN_KEY = 'gyosai-plan-done'
+
+function WeeklyPlan() {
+  const [done, setDone] = useState(() => { try { return JSON.parse(localStorage.getItem(PLAN_KEY)) || {} } catch { return {} } })
+  const today = new Date().toISOString().slice(0, 10)
+  const toggle = k => setDone(d => { const n = { ...d, [k]: !d[k] }; localStorage.setItem(PLAN_KEY, JSON.stringify(n)); return n })
+  const all = weeklyPlan.reduce((a, w) => a + w.tasks.length, 0), ok = Object.values(done).filter(Boolean).length
+  return <section className="panel plan" id="plan"><div className="panel-title"><div><h3><CalendarCheck />9月6日から本試験までのタスク予定表</h3><p>週ごとのテーマ・模試・AI実力スコア目標。チェックはこのブラウザに保存</p></div><div className="ai-total"><strong>{ok}</strong><small>/{all}</small><em>タスク完了</em></div></div>
+    <ol className="weeks">{weeklyPlan.map((w, i) => { const end = addDays(w.start, 6); const cur = today >= w.start && today <= end; const past = today > end
+      const exams = mockExams.filter(e => e.date >= w.start && e.date <= end)
+      return <li key={w.start} className={cur ? 'current' : past ? 'past' : ''}>
+        <div className="wk"><span>WEEK {i + 1}</span><time dateTime={w.start}>{md(w.start)}〜{md(end)}</time>{cur && <em>今週</em>}</div>
+        <div className="wk-body"><h4>{w.theme}</h4>
+          <div className="wk-meta">{exams.map(e => { const p = providerOf(e.provider); return <i key={e.id} style={{ borderColor: p.color, color: p.color }}>{md(e.date)} {e.title.replace(/^(LEC|伊藤塾|TAC|東京法経学院) /, '')}</i> })}<b>AIスコア目標 {w.aiGoal}</b></div>
+          <ul>{w.tasks.map((t, j) => { const k = `${w.start}-${j}`; return <li key={k}><label><input type="checkbox" checked={!!done[k]} onChange={() => toggle(k)} /><span>{t}</span></label></li> })}</ul>
+        </div></li> })}
+      <li className="exam-day"><div className="wk"><span>11/8</span></div><div className="wk-body"><h4>令和8年度 行政書士試験 本試験</h4><p>目標：択一112・多肢16・記述24・基礎知識40 ＝ 192点</p></div></li>
+    </ol></section>
+}
+
 function ScoreBar({ label, v, max, line }) {
   return <div className="score-row"><span>{label}</span><div className="bar">{line != null && <b style={{ left: `${line / max * 100}%` }} />}<i style={{ width: `${v / max * 100}%` }} /></div><strong>{v}<small>/{max}</small></strong></div>
 }
@@ -61,6 +83,8 @@ export default function MockExams() {
       {strategyPost.sections.map(s => <section key={s.h}><h4>{s.h}</h4>{s.body?.map(b => <p key={b}>{b}</p>)}{s.list && <ul>{s.list.map(l => <li key={l}>{l}</li>)}</ul>}</section>)}
       <div className="signals">{strategyPost.tags.map(t => <i key={t}>{t}</i>)}</div>
     </article>
+
+    <WeeklyPlan />
 
     <section className="metric-grid">
       <Metric icon={<ClipboardList />} n={`${done.length}/${mockExams.length}`} label="受験済み" sub="計13回を予定" />
@@ -100,6 +124,9 @@ export default function MockExams() {
 
     {ai && <section className="panel studying"><div className="panel-title"><div><h3><BrainCircuit />スタディング AI実力スコア</h3><p>{studying.course}・記述式を除く{studying.max}点満点・目標{studying.target}点（{fmt(ai.date)}時点）</p></div><div className="ai-total"><strong>{ai.score}</strong><small>/{studying.max}</small><em>目標まで {Math.max(0, +(studying.target - ai.score).toFixed(1))}点</em></div></div>
       <div className="scores">{ai.subjects.map(su => <div key={su.name} className="score-row ai"><span>{su.name}</span><div className="bar"><b style={{ left: `${su.avg / su.max * 100}%` }} title={`受講者平均 ${su.avg}`} /><i style={{ width: `${su.score / su.max * 100}%` }} /></div><strong>{su.score}<small>/{su.max}</small></strong><em>平均{su.avg}・上位{su.pct}%</em></div>)}</div>
+      <div className="analysis"><h4>「AIスコアを合格点まで上げる」勉強法は合っているか</h4><p className="verdict">{aiAnalysis.verdict}</p>
+        <ul>{aiAnalysis.points.map(p => <li key={p.h} className={p.ok ? 'ok' : 'ng'}>{p.ok ? <CheckCircle2 /> : <XCircle />}<div><b>{p.h}</b><p>{p.t}</p></div></li>)}</ul>
+        <p className="conclusion">{aiAnalysis.conclusion}</p></div>
       <p className="note">縦線は受講者平均（過去1年以内の学習者中の位置）。AI実力スコアは問題演習の正答率・反復・難易度・模試得点から「今受けたら何点か」を予測する指標で、忘却効果により学習を止めると下がる（<a href="https://studying.jp/function/aiscore.html" target="_blank" rel="noopener">仕組み</a>）。現状は全科目が平均以下で、特に基礎法学・憲法の差が大きい。行政法（92点配点）の底上げが最短で目標に近づく。</p>
     </section>}
 
