@@ -1,0 +1,73 @@
+/*
+Theme Name: AFFINGER Child
+Template: affinger
+Description: AFFINGER6 対応（gyosei-yosou.jp カスタマイズ）
+Version: 20260906.4
+*/
+
+/* 広告枠 */
+.gy-ad{margin:2em 0;text-align:center}
+.gy-ad-label{display:block;font-size:11px;color:#999;margin-bottom:4px;letter-spacing:.05em}
+.gy-pr{font-size:12px;color:#666;background:#f6f6f6;border-left:3px solid #ccc;padding:8px 12px;margin:0 0 1.5em}
+
+/* 本試験カウントダウン */
+.gy-countdown{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;background:#152824;color:#e9ede9;border-radius:8px;padding:14px 18px;margin:0 0 1.5em}
+.gy-countdown-label{font-size:13px;opacity:.8}
+.gy-countdown-days{font-size:16px}
+.gy-countdown-days strong{font-size:32px;color:#f0c674;margin:0 2px}
+
+/* 得点表 */
+.gy table.gy-score{width:100%;border-collapse:collapse;font-size:14px;margin:1em 0 2em}
+.gy table.gy-score th,.gy table.gy-score td{border:1px solid #e3e1da;padding:8px 10px;text-align:right;white-space:nowrap}
+.gy table.gy-score th{background:#f5f4ef;text-align:center;font-weight:700}
+.gy table.gy-score td:first-child,.gy table.gy-score th:first-child{text-align:left;white-space:nowrap}
+.gy table.gy-log td:nth-child(2),.gy table.gy-log th:nth-child(2){text-align:left;white-space:normal;min-width:16em}
+.gy table.gy-score td small{color:#777;font-size:11px}
+.gy table.gy-score tr.pass td{background:#eef7f2}
+.gy table.gy-score td.ng{color:#c0543d;font-weight:700}
+.gy table.gy-score td.ok{color:#3c8a6b;font-weight:700}
+.gy .gy-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* 得点サマリーカード */
+.gy-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:1em 0 1.5em}
+.gy-metric{background:#fff;border:1px solid #e3e1da;border-radius:8px;padding:12px 14px}
+.gy-metric small{display:block;color:#777;font-size:12px}
+.gy-metric b{font-size:24px;line-height:1.3}
+.gy-metric .sub{font-size:12px;color:#999}
+
+/* 状態バッジ */
+.gy-badge{display:inline-block;font-size:11px;line-height:1;padding:4px 8px;border-radius:999px;border:1px solid currentColor;margin-right:6px;vertical-align:middle}
+.gy-badge.done{color:#3c8a6b}
+.gy-badge.progress{color:#d9822b}
+.gy-badge.planned{color:#888}
+.gy-badge.lec{color:#b3462b}.gy-badge.itojuku{color:#2e5f8a}.gy-badge.tac{color:#4a6b2f}.gy-badge.thg{color:#6b4a8a}
+
+/* 週次予定表 */
+.gy-plan{list-style:none;padding:0;margin:1em 0 2em}
+.gy-plan>li{border-top:1px solid #efede6;padding:14px 0}
+.gy-plan>li.current{background:#faf9f5;margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:6px}
+.gy-plan .wk{font-size:12px;color:#777;letter-spacing:.06em}
+.gy-plan .theme{font-weight:700;margin:2px 0 6px}
+.gy-plan ul{margin:0 0 0 1.2em;padding:0;font-size:14px}
+
+/* FAQ */
+.gy-faq-item{border-bottom:1px solid #efede6;padding:10px 0}
+.gy-faq-q{font-size:16px;margin:0 0 6px;padding:0;border:0;background:none}
+.gy-faq-q::before{content:"Q. ";color:#c0543d;font-weight:700}
+.gy-faq-a{font-size:14px}
+
+/* 分析ボックス */
+.gy-verdict{display:inline-block;font-weight:700;color:#c0543d;background:#fbf1ee;padding:4px 10px;border-radius:4px;margin:0 0 .5em}
+.gy-conclusion{background:#152824;color:#e9ede9;padding:14px 18px;border-radius:8px;margin:1em 0 2em}
+
+/*media Queries スマホサイズ（599px）以下で適応したいCSS - スマホのみ
+---------------------------------------------------------------------------------------------------*/
+@media print, screen and (max-width: 599px) {
+	.gy-countdown-days strong{font-size:26px}
+	.gy table.gy-score{font-size:12px}
+	/*-- ここまで --*/
+}
+
+.gy .gy-lead{font-size:1.05em;line-height:1.9;border-left:4px solid #152824;padding:6px 14px;margin:0 0 1.5em;background:#faf9f5}
+.gy table.gy-matrix td{text-align:center}
+.gy table.gy-matrix td:first-child{text-align:left;white-space:nowrap}
