@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { BrainCircuit, CalendarDays, CheckCircle2, ChevronRight, ClipboardList, Flag, HelpCircle, History, ShieldCheck, TrendingUp } from 'lucide-react'
-import { ATTEMPT, EXAM_DATE, MAX_SCORE, PASS_LINE, faq, isPass, lawOf, mockExams, pastResults, providers, resultTotal, studying, totalOf } from './mockExams.js'
+import { BrainCircuit, CalendarDays, CheckCircle2, ChevronRight, ClipboardList, Compass, Flag, HelpCircle, History, ShieldCheck, TrendingUp } from 'lucide-react'
+import { ATTEMPT, EXAM_DATE, MAX_SCORE, PASS_LINE, faq, isPass, lawOf, mockExams, pastResults, providers, resultTotal, strategyPost, studying, totalOf } from './mockExams.js'
 
 const SITE = 'https://syunnjack.github.io/gyosei-yosou/'
 const providerOf = id => providers.find(p => p.id === id)
@@ -16,7 +16,7 @@ function useJsonLd(done) {
     el.text = JSON.stringify([
       { '@context': 'https://schema.org', '@type': 'Blog', name: '行政書士試験 模試の記録', url: SITE + '#mock-exams', inLanguage: 'ja',
         description: `令和8年度（2026年11月8日）行政書士試験（${ATTEMPT}回目の受験）に向けた模試13回分の得点推移・過去の本試験成績・スタディングAI実力スコアの記録。`,
-        blogPost: done.map(e => ({ '@type': 'BlogPosting', headline: `${e.title}の結果と復習ポイント`, datePublished: e.date, url: `${SITE}#mock-${e.id}`, articleBody: e.summary, keywords: ['行政書士', '模試', providerOf(e.provider).name, ...e.tags].join(',') })) },
+        blogPost: [{ '@type': 'BlogPosting', headline: strategyPost.title, datePublished: strategyPost.date, url: `${SITE}#post-${strategyPost.id}`, description: strategyPost.lead, articleBody: strategyPost.sections.map(s => [s.h, ...(s.body || []), ...(s.list || [])].join('\n')).join('\n\n'), keywords: ['行政書士', ...strategyPost.tags].join(',') }, ...done.map(e => ({ '@type': 'BlogPosting', headline: `${e.title}の結果と復習ポイント`, datePublished: e.date, url: `${SITE}#mock-${e.id}`, articleBody: e.summary, keywords: ['行政書士', '模試', providerOf(e.provider).name, ...e.tags].join(',') }))] },
       { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }
     ])
     document.head.appendChild(el); return () => el.remove()
@@ -55,6 +55,12 @@ export default function MockExams() {
 
   return <div className="content" id="mock-exams">
     <section className="hero mock-hero"><div><span className="tag"><Flag />MOCK EXAM LOG</span><h2>{ATTEMPT}回目の受験。合格までの推移を、<br /><em>模試13回で記録する。</em></h2><p>令和8年度 行政書士試験（{fmt(EXAM_DATE)}）まで、LEC・伊藤塾・TAC・東京法経学院の模試をすべて自宅受験。前回168点（あと12点）から、総得点だけでなく法令122点・基礎知識24点の足切りも毎回チェックし、次回までの復習項目を残します。</p></div><div className="score-ring countdown"><span>本試験まで</span><strong>{daysLeft()}<small>日</small></strong><p>{fmt(EXAM_DATE)}</p></div></section>
+
+    <article className="panel post" id={`post-${strategyPost.id}`}><div className="panel-title"><div><span className="eyebrow"><Compass />STRATEGY</span><h3>{strategyPost.title}</h3><p><time dateTime={strategyPost.date}>{fmt(strategyPost.date)}</time> 投稿</p></div></div>
+      <p className="lead">{strategyPost.lead}</p>
+      {strategyPost.sections.map(s => <section key={s.h}><h4>{s.h}</h4>{s.body?.map(b => <p key={b}>{b}</p>)}{s.list && <ul>{s.list.map(l => <li key={l}>{l}</li>)}</ul>}</section>)}
+      <div className="signals">{strategyPost.tags.map(t => <i key={t}>{t}</i>)}</div>
+    </article>
 
     <section className="metric-grid">
       <Metric icon={<ClipboardList />} n={`${done.length}/${mockExams.length}`} label="受験済み" sub="計13回を予定" />
