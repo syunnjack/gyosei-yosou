@@ -10,8 +10,8 @@ const pct=(a,b)=>a/b*100
 
 function Sparkline({values,color}){const max=Math.max(...values);const min=Math.min(...values);const points=values.map((v,i)=>`${i*24},${22-(v-min)/(max-min||1)*14}`).join(' ');return <svg className="spark" viewBox="0 0 120 28" aria-label="6年推移"><polyline points={points} fill="none" stroke={color} strokeWidth="2"/>{values.map((v,i)=><circle key={i} cx={i*24} cy={22-(v-min)/(max-min||1)*14} r="2.5" fill={color}/>)}</svg>}
 
-function App(){
- const [tab,setTab]=useState(tabs[0]); const [subject,setSubject]=useState('すべて'); const [openQ,setOpenQ]=useState(null); const [mobile,setMobile]=useState(false)
+function App({initialTab}){
+ const [tab,setTab]=useState(initialTab||tabs[0]); const [subject,setSubject]=useState('すべて'); const [openQ,setOpenQ]=useState(null); const [mobile,setMobile]=useState(false)
  const filtered=useMemo(()=>subject==='すべて'?predictions:predictions.filter(p=>p.subject===subject),[subject])
  return <div className="app">
   <aside className={mobile?'side open':'side'}>
