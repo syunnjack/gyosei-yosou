@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Activity, ArrowUpRight, BarChart3, BookOpen, BrainCircuit, Check, ChevronRight, Database, FileSearch, Gauge, Menu, RotateCcw, ShieldCheck, Sparkles, Target, X } from 'lucide-react'
 import { forecastQuestions, predictions, subjects, years } from './data.js'
+import './score.css'
 import { scoreAverageTotal, scoreGap, scoreMeta, scorePlan, scoreSubjects } from './score.js'
 
 const tabs=['予測レポート','出題分析','予想問題','AI実力スコア']
