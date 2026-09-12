@@ -4,3 +4,4 @@
 .score-table{overflow-x:auto}.score-table table{width:100%;border-collapse:collapse;white-space:nowrap}.score-table th{font:10px 'DM Mono';letter-spacing:.06em;color:#89918f;text-align:right;padding:0 0 10px;border-bottom:1px solid #deddd6}.score-table th:first-child{text-align:left}.score-table td{font:500 12px 'DM Mono';text-align:right;padding:11px 0;border-bottom:1px solid #eceae4}.score-table td:first-child{font:11px 'Noto Sans JP';text-align:left}.score-table td+td{padding-left:14px}.score-table .need{color:#a35b46}.score-table .goal{color:#57766d}.score-table .sum td{border-bottom:0;color:#1d2624}.score-table .sum td:first-child{font-weight:600}
 .notice>div b{display:block}
 @media(max-width:600px){.score-row{grid-template-columns:10px 74px 1fr 70px;gap:10px}.score-row>em,.score-row>small{display:none}}
+.trend{width:100%;height:auto;margin-bottom:6px}.score-table .up{color:#57766d}

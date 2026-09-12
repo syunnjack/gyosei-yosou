@@ -2,11 +2,12 @@ import { useMemo, useState } from 'react'
 import { Activity, ArrowUpRight, BarChart3, BookOpen, BrainCircuit, Check, ChevronRight, Database, FileSearch, Gauge, Menu, RotateCcw, ShieldCheck, Sparkles, Target, X } from 'lucide-react'
 import { forecastQuestions, predictions, subjects, years } from './data.js'
 import './score.css'
-import { scoreAverageTotal, scoreGap, scoreMeta, scorePlan, scoreSubjects } from './score.js'
+import { scoreAverageTotal, scoreGap, scoreMeta, scorePlan, scorePrevSnapshot, scorePrevSubjects, scoreSnapshots, scoreSubjects } from './score.js'
 
 const tabs=['予測レポート','出題分析','予想問題','AI実力スコア']
 const one=n=>n.toFixed(1)
 const pct=(a,b)=>a/b*100
+const signed=n=>(n>=0?'+':'')+one(n)
 
 function Sparkline({values,color}){const max=Math.max(...values);const min=Math.min(...values);const points=values.map((v,i)=>`${i*24},${22-(v-min)/(max-min||1)*14}`).join(' ');return <svg className="spark" viewBox="0 0 120 28" aria-label="6年推移"><polyline points={points} fill="none" stroke={color} strokeWidth="2"/>{values.map((v,i)=><circle key={i} cx={i*24} cy={22-(v-min)/(max-min||1)*14} r="2.5" fill={color}/>)}</svg>}
 
@@ -66,11 +67,40 @@ function Radar(){
  </div>
 }
 
+// 記録が2回分以上あるときだけ、総合スコアの推移と前回比を出す。
+function Trend(){
+ if(!scorePrevSubjects) return null
+ const w=660,h=190,l=42,r=14,t=18,b=28
+ const totals=scoreSnapshots.map(s=>s.total)
+ const min=Math.floor(Math.min(...totals)-2), max=Math.ceil(Math.max(...totals)+2)
+ const x=i=>l+(w-l-r)*i/(scoreSnapshots.length-1)
+ const y=v=>t+(h-t-b)*(1-(v-min)/(max-min||1))
+ const line=scoreSnapshots.map((s,i)=>`${x(i)},${y(s.total)}`).join(' ')
+ const diff=scoreMeta.total-scorePrevSnapshot.total
+ return <section className="panel"><div className="panel-title"><div><h3>スコアの推移</h3><p>{scorePrevSnapshot.date} → {scoreMeta.capturedOn}で{signed(diff)}点。目標まであと{one(scoreGap)}点</p></div></div>
+  <svg className="trend" viewBox={`0 0 ${w} ${h}`} role="img" aria-label={`総合スコアの推移。${scorePrevSnapshot.date}は${one(scorePrevSnapshot.total)}点、${scoreMeta.capturedOn}は${one(scoreMeta.total)}点。`}>
+   <line x1={l} y1={y(min)} x2={w-r} y2={y(min)} stroke="#e2e0d8"/>
+   <line x1={l} y1={y(max)} x2={w-r} y2={y(max)} stroke="#e2e0d8"/>
+   <text x={l-8} y={y(max)} textAnchor="end" dominantBaseline="middle" fontSize="10" fill="#9aa3a0">{max}</text>
+   <text x={l-8} y={y(min)} textAnchor="end" dominantBaseline="middle" fontSize="10" fill="#9aa3a0">{min}</text>
+   <polyline points={line} fill="none" stroke="#c99548" strokeWidth="2"/>
+   {scoreSnapshots.map((s,i)=><g key={s.date}>
+    <circle cx={x(i)} cy={y(s.total)} r="4" fill="#c99548"/>
+    <text x={x(i)} y={y(s.total)-12} textAnchor="middle" fontSize="12" fill="#42534e">{one(s.total)}</text>
+    <text x={x(i)} y={h-8} textAnchor={i===0?'start':i===scoreSnapshots.length-1?'end':'middle'} fontSize="10" fill="#89918f">{s.date}</text>
+   </g>)}
+  </svg>
+  <div className="score-table"><table><thead><tr><th>科目</th><th>{scorePrevSnapshot.date}</th><th>{scoreMeta.capturedOn}</th><th>前回比</th><th>上位％の変化</th></tr></thead><tbody>{scoreSubjects.map((s,i)=>{const p=scorePrevSubjects[i];return <tr key={s.name}><td>{s.name}</td><td>{one(p.score)}</td><td>{one(s.score)}</td><td className={s.score>=p.score?'up':'need'}>{signed(s.score-p.score)}</td><td>{one(p.percentile)}% → {one(s.percentile)}%</td></tr>})}<tr className="sum"><td>合計</td><td>{one(scorePrevSnapshot.total)}</td><td>{one(scoreMeta.total)}</td><td className={diff>=0?'up':'need'}>{signed(diff)}</td><td>—</td></tr></tbody></table></div>
+ </section>
+}
+
 function Score(){return <div className="content">
  <div className="page-intro"><span className="eyebrow">PERSONAL DIAGNOSTIC</span><h2>AI実力スコア</h2><p>{scoreMeta.source}の値（{scoreMeta.capturedOn}時点）を科目別に並べ、受講者平均との差と目標{scoreMeta.target}点までの残りを整理しています。</p></div>
- <section className="metric-grid"><Metric icon={<Gauge/>} n={one(scoreMeta.total)} label="現在のスコア" sub={`${scoreMeta.totalMax}点満点`}/><Metric icon={<Target/>} n={String(scoreMeta.target)} label="目標点" sub={`達成率 ${one(pct(scoreMeta.total,scoreMeta.target))}%`}/><Metric icon={<ArrowUpRight/>} n={`+${one(scoreGap)}`} label="目標まで" sub="不足している点数"/><Metric icon={<Activity/>} n={one(scoreAverageTotal)} label="受講者平均" sub={`差 ${one(scoreMeta.total-scoreAverageTotal)}点`}/></section>
+ <section className="metric-grid"><Metric icon={<Gauge/>} n={one(scoreMeta.total)} label="現在のスコア" sub={scorePrevSnapshot?`${scoreMeta.totalMax}点満点・前回比 ${signed(scoreMeta.total-scorePrevSnapshot.total)}点`:`${scoreMeta.totalMax}点満点`}/><Metric icon={<Target/>} n={String(scoreMeta.target)} label="目標点" sub={`達成率 ${one(pct(scoreMeta.total,scoreMeta.target))}%`}/><Metric icon={<ArrowUpRight/>} n={`+${one(scoreGap)}`} label="目標まで" sub="不足している点数"/><Metric icon={<Activity/>} n={one(scoreAverageTotal)} label="受講者平均" sub={`差 ${one(scoreMeta.total-scoreAverageTotal)}点`}/></section>
 
  <section className="panel"><div className="panel-title"><div><h3>科目別のスコアバランス</h3><p>得点率で受講者平均と重ねる</p></div></div><Radar/></section>
+
+ <Trend/>
 
  <section className="panel"><div className="panel-title"><div><h3>科目別の実力</h3><p>縦線は受講者平均の位置</p></div></div><div className="subject-list">{scoreSubjects.map(s=><div className="score-row" key={s.name}><span className="dot" style={{background:s.color}}/><b>{s.name}</b><div className="bar"><i style={{width:`${pct(s.score,s.max)}%`,background:s.color}}/><u style={{left:`${pct(s.average,s.max)}%`}}/></div><strong>{one(s.score)}<small>/{s.max}</small></strong><em className={s.score>=s.average?'up':'down'}>{s.score>=s.average?'+':''}{one(s.score-s.average)}</em><small>上位{one(s.percentile)}%</small></div>)}</div></section>
 
