@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta name="description" content="行政書士試験のAI実力スコアを科目別に可視化したページです。受講者平均との差、上位何％にいるか、目標160点までに必要な上積みを科目ごとに確認できます。" />
+    <link rel="canonical" href="https://syunnjack.github.io/gyosei-yosou/ai-score/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://syunnjack.github.io/gyosei-yosou/ai-score/" />
+    <meta property="og:site_name" content="GYOSAI" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:title" content="AI実力スコア | 行政書士試験" />
+    <meta property="og:description" content="科目別のAI実力スコアを受講者平均と重ね、目標点までの残りを整理したページです。" />
+    <title>AI実力スコア | 行政書士試験</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B7JKBTJ3RR"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-B7JKBTJ3RR');</script>
+  </head>
+  <body>
+    <!--
+      トップページと同じく、JavaScript が動く前のHTMLにも本文を置いておく。
+      数値は src/score.js が正で、ここは読み上げ環境やクローラー向けの控えとする。
+    -->
+    <div id="root">
+      <main>
+        <h1>行政書士試験 AI実力スコア</h1>
+        <p>学習サービスで測った科目別のAI実力スコアを、受講者平均や目標点と並べて確認するためのページです。記述式（60点）はスコアの対象外のため、300点満点ではなく240点満点として扱っています。</p>
+
+        <h2>見られるもの</h2>
+        <ul>
+          <li><strong>総合スコアと目標までの残り</strong> — 目標160点に対して何点足りないかを表示します</li>
+          <li><strong>科目別のスコアバランス</strong> — 得点率のレーダーチャートに受講者平均を重ねます</li>
+          <li><strong>科目別の実力</strong> — 平均との差と、上位から何％の位置かを科目ごとに並べます</li>
+          <li><strong>上積みの目安</strong> — 不足分を各科目の伸びしろの比で割り振った目安です</li>
+        </ul>
+
+        <p><strong>AI実力スコアは学習サービスによる推定値で、実際の得点・合格を保証するものではありません。</strong>試験の範囲・配点・実施要領は、必ず一般財団法人行政書士試験研究センターの公式発表で確認してください。</p>
+
+        <p><small>当サイトは個人が作成した学習支援ツールで、試験実施団体とは関係ありません。</small></p>
+      </main>
+    </div>
+    <script type="module" src="../src/main-score.jsx"></script>
+  </body>
+</html>
