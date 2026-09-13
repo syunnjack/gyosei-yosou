@@ -9,6 +9,7 @@ export default defineConfig({
   base:'./',
   build:{rollupOptions:{input:{
     main:resolve(import.meta.dirname,'index.html'),
-    score:resolve(import.meta.dirname,'ai-score/index.html')
+    score:resolve(import.meta.dirname,'ai-score/index.html'),
+    strategy:resolve(import.meta.dirname,'strategy/index.html')
   }}}
 })
