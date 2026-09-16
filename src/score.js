@@ -39,7 +39,10 @@ export const scoreMeta = {
   source: 'スタディング 学習レポート（AI実力スコア）',
   total: latest.total,
   totalMax: 240,
-  target: 160
+  target: 180,
+  // 記述式を計算に入れない設計にしたので、目標は240点満点で180点。
+  // スタディングの画面に出ている目標160点は、記述式で20点取る前提の値。
+  targetNote: '記述式を計算に入れず、択一・多肢・基礎知識だけで180点を取る設計'
 }
 
 export const scoreSubjects = toSubjects(latest)
@@ -48,12 +51,20 @@ export const scorePrevSubjects = toSubjects(previous)
 export const scorePrevSnapshot = previous
 
 export const scoreAverageTotal = scoreSubjects.reduce((n,s)=>n+s.average,0)
-export const scoreGap = scoreMeta.target - scoreMeta.total
+// 実際に受けた模試と本試験の得点。AI実力スコアと同じ「記述式を除く240点満点」に
+// そろえるため、法令択一＋多肢選択＋基礎知識だけを足している（written は参考）。
+// 模試の実施月までは手元の成績表から特定できないので、年と回だけを持つ。
+export const actualExams = [
+  {label:'2023 LEC模試②', kind:'模試', choice:76, multi:2, general:16, written:0, total300:94, note:'自己採点'},
+  {label:'令和5年度 本試験', kind:'本試験', choice:84, multi:8, general:44, written:16, total300:152},
+  {label:'2024 大原模試①', kind:'模試', choice:92, multi:22, general:36, written:10, total300:160},
+  {label:'2024 大原模試②', kind:'模試', choice:84, multi:10, general:16, written:20, total300:130},
+  {label:'令和6年度 本試験', kind:'本試験', choice:104, multi:8, general:48, written:8, total300:168}
+].map(e => ({...e, score240: e.choice + e.multi + e.general}))
 
-// 目標までの不足分を、各科目の伸びしろ（満点−現在スコア）の比で割り振る。
-// 配点の大きい行政法・基礎知識ほど厚く配分される。
-const headroom = scoreSubjects.reduce((n,s)=>n+(s.max-s.score),0)
-export const scorePlan = scoreSubjects.map(s=>{
-  const need = scoreGap*(s.max-s.score)/headroom
-  return {...s, need, goal: s.score+need}
-})
+// 直近の本試験を「いまの実力」とみなす。模試は回ごとに難易度と母集団が動くため。
+export const latestActual = [...actualExams].reverse().find(e => e.kind === '本試験')
+export const actualGap = scoreMeta.target - latestActual.score240
+// AI実力スコアと実測のひらき。スタディングのスコアは繰り返し学習でも上がる指標なので、
+// 「できるか」だけを見る実測とは一致しない。
+export const aiDelta = latestActual.score240 - scoreMeta.total
