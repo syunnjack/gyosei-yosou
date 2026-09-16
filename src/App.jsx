@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
 import { Activity, ArrowUpRight, BarChart3, BookOpen, BrainCircuit, Check, ChevronRight, Database, FileSearch, Flag, Gauge, ScrollText, Menu, RotateCcw, ShieldCheck, Sparkles, Target, X } from 'lucide-react'
 import { forecastQuestions, predictions, subjects, years } from './data.js'
+import { to } from './paths.js'
 import Strategy from './Strategy.jsx'
 import { ArticleList } from './Article.jsx'
 import './score.css'
-import { scoreAverageTotal, scoreGap, scoreMeta, scorePlan, scorePrevSnapshot, scorePrevSubjects, scoreSnapshots, scoreSubjects } from './score.js'
+import { actualExams, actualGap, aiDelta, latestActual, scoreAverageTotal, scoreMeta, scorePrevSnapshot, scorePrevSubjects, scoreSnapshots, scoreSubjects } from './score.js'
 
 const tabs=['予測レポート','出題分析','予想問題','AI実力スコア','合格作戦','受験記']
 const one=n=>n.toFixed(1)
@@ -81,7 +82,7 @@ function Trend(){
  const y=v=>t+(h-t-b)*(1-(v-min)/(max-min||1))
  const line=scoreSnapshots.map((s,i)=>`${x(i)},${y(s.total)}`).join(' ')
  const diff=scoreMeta.total-scorePrevSnapshot.total
- return <section className="panel"><div className="panel-title"><div><h3>スコアの推移</h3><p>{scorePrevSnapshot.date} → {scoreMeta.capturedOn}で{signed(diff)}点。目標まであと{one(scoreGap)}点</p></div></div>
+ return <section className="panel"><div className="panel-title"><div><h3>スコアの推移</h3><p>{scorePrevSnapshot.date} → {scoreMeta.capturedOn}で{signed(diff)}点。目標との距離は実測で見る</p></div></div>
   <svg className="trend" viewBox={`0 0 ${w} ${h}`} role="img" aria-label={`総合スコアの推移。${scorePrevSnapshot.date}は${one(scorePrevSnapshot.total)}点、${scoreMeta.capturedOn}は${one(scoreMeta.total)}点。`}>
    <line x1={l} y1={y(min)} x2={w-r} y2={y(min)} stroke="#e2e0d8"/>
    <line x1={l} y1={y(max)} x2={w-r} y2={y(max)} stroke="#e2e0d8"/>
@@ -100,7 +101,7 @@ function Trend(){
 
 function Score(){return <div className="content">
  <div className="page-intro"><span className="eyebrow">PERSONAL DIAGNOSTIC</span><h2>AI実力スコア</h2><p>{scoreMeta.source}の値（{scoreMeta.capturedOn}時点）を科目別に並べ、受講者平均との差と目標{scoreMeta.target}点までの残りを整理しています。</p></div>
- <section className="metric-grid"><Metric icon={<Gauge/>} n={one(scoreMeta.total)} label="現在のスコア" sub={scorePrevSnapshot?`${scoreMeta.totalMax}点満点・前回比 ${signed(scoreMeta.total-scorePrevSnapshot.total)}点`:`${scoreMeta.totalMax}点満点`}/><Metric icon={<Target/>} n={String(scoreMeta.target)} label="目標点" sub={`達成率 ${one(pct(scoreMeta.total,scoreMeta.target))}%`}/><Metric icon={<ArrowUpRight/>} n={`+${one(scoreGap)}`} label="目標まで" sub="不足している点数"/><Metric icon={<Activity/>} n={one(scoreAverageTotal)} label="受講者平均" sub={`差 ${one(scoreMeta.total-scoreAverageTotal)}点`}/></section>
+ <section className="metric-grid"><Metric icon={<Gauge/>} n={String(latestActual.score240)} label="いまの実力（実測）" sub={`${latestActual.label}・${scoreMeta.totalMax}点満点に換算`}/><Metric icon={<Target/>} n={String(scoreMeta.target)} label="目標点" sub={`${scoreMeta.totalMax}点満点・記述式を計算に入れない`}/><Metric icon={<ArrowUpRight/>} n={`+${actualGap}`} label="目標まで" sub="択一に直すと5問"/><Metric icon={<Activity/>} n={one(scoreMeta.total)} label="AI実力スコア" sub={`参考値・実測より ${one(aiDelta)}点低い`}/></section>
 
  <section className="panel"><div className="panel-title"><div><h3>科目別のスコアバランス</h3><p>得点率で受講者平均と重ねる</p></div></div><Radar/></section>
 
@@ -108,9 +109,9 @@ function Score(){return <div className="content">
 
  <section className="panel"><div className="panel-title"><div><h3>科目別の実力</h3><p>縦線は受講者平均の位置</p></div></div><div className="subject-list">{scoreSubjects.map(s=><div className="score-row" key={s.name}><span className="dot" style={{background:s.color}}/><b>{s.name}</b><div className="bar"><i style={{width:`${pct(s.score,s.max)}%`,background:s.color}}/><u style={{left:`${pct(s.average,s.max)}%`}}/></div><strong>{one(s.score)}<small>/{s.max}</small></strong><em className={s.score>=s.average?'up':'down'}>{s.score>=s.average?'+':''}{one(s.score-s.average)}</em><small>上位{one(s.percentile)}%</small></div>)}</div></section>
 
- <section className="panel"><div className="panel-title"><div><h3>目標{scoreMeta.target}点までの上積み目安</h3><p>不足分を各科目の伸びしろの比で配分</p></div></div><div className="score-table"><table><thead><tr><th>科目</th><th>現在</th><th>上積み</th><th>到達目安</th><th>目安の得点率</th></tr></thead><tbody>{scorePlan.map(p=><tr key={p.name}><td>{p.name}</td><td>{one(p.score)} / {p.max}</td><td className="need">+{one(p.need)}</td><td className="goal">{one(p.goal)}</td><td>{one(pct(p.goal,p.max))}%</td></tr>)}<tr className="sum"><td>合計</td><td>{one(scoreMeta.total)} / {scoreMeta.totalMax}</td><td className="need">+{one(scoreGap)}</td><td className="goal">{one(scoreMeta.target)}</td><td>{one(pct(scoreMeta.target,scoreMeta.totalMax))}%</td></tr></tbody></table></div></section>
+ <section className="panel"><div className="panel-title"><div><h3>実測とAI実力スコアの差</h3><p>記述式を除いた{scoreMeta.totalMax}点満点にそろえて並べる</p></div></div><div className="score-table"><table><thead><tr><th className="left">回</th><th>法令択一</th><th>多肢</th><th>基礎知識</th><th>240点換算</th><th>300点満点</th></tr></thead><tbody>{actualExams.map(e=><tr key={e.label} className={e.kind==='本試験'?'sum':''}><td className="left">{e.label}{e.note?`（${e.note}）`:''}</td><td>{e.choice}</td><td>{e.multi}</td><td>{e.general}</td><td className={e.score240>=scoreMeta.target?'goal':''}>{e.score240}</td><td className="note">{e.total300}</td></tr>)}<tr className="sum"><td className="left">AI実力スコア（{scoreMeta.capturedOn}）</td><td colSpan="3" className="note">科目別の推定値</td><td className="need">{one(scoreMeta.total)}</td><td className="note">—</td></tr></tbody></table></div><p className="para">直近の本試験（{latestActual.label}）を記述式抜きで数えると<b>{latestActual.score240}点</b>。同じ物差しのAI実力スコアは<b>{one(scoreMeta.total)}点</b>で、<b>{one(aiDelta)}点</b>のひらきがあります。AI実力スコアは繰り返し学習でも上がる指標なので、「できるか」だけを見る実測とは一致しません。<b>計画を動かすのは実測のほう</b>です。目標{scoreMeta.target}点まで、実測基準で残り{actualGap}点。科目ごとの配分は <a href={to('strategy/')}>合格作戦</a> にまとめています。</p></section>
 
- <div className="notice"><ShieldCheck/><div><b>スコアの前提</b><p>AI実力スコアは実際の得点・合格を保証するものではありません。行政書士試験は300点満点ですが、記述式（60点）が対象外のため、ここでは{scoreMeta.totalMax}点満点として扱っています。目標{scoreMeta.target}点も同じ基準です。</p></div></div>
+ <div className="notice"><ShieldCheck/><div><b>スコアの前提</b><p>AI実力スコアは実際の得点・合格を保証するものではありません。行政書士試験は300点満点ですが、記述式（60点）が対象外のため、ここでは{scoreMeta.totalMax}点満点として扱っています。目標{scoreMeta.target}点は、{scoreMeta.targetNote}という今年の方針から置いた値で、スタディングの画面に出ている目標160点（記述式で20点取る前提）とは基準が違います。</p></div></div>
  </div>}
 
 export default App
