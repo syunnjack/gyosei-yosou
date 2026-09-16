@@ -2,10 +2,11 @@ import { useMemo, useState } from 'react'
 import { Activity, ArrowUpRight, BarChart3, BookOpen, BrainCircuit, Check, ChevronRight, Database, FileSearch, Flag, Gauge, Menu, RotateCcw, ShieldCheck, Sparkles, Target, X } from 'lucide-react'
 import { forecastQuestions, predictions, subjects, years } from './data.js'
 import Strategy from './Strategy.jsx'
+import Materials from './Materials.jsx'
 import './score.css'
 import { scoreAverageTotal, scoreGap, scoreMeta, scorePlan, scorePrevSnapshot, scorePrevSubjects, scoreSnapshots, scoreSubjects } from './score.js'
 
-const tabs=['予測レポート','出題分析','予想問題','AI実力スコア','合格作戦']
+const tabs=['予測レポート','出題分析','予想問題','AI実力スコア','合格作戦','教材を探す','教材ランキング','教材診断']
 const one=n=>n.toFixed(1)
 const pct=(a,b)=>a/b*100
 const signed=n=>(n>=0?'+':'')+one(n)
@@ -19,7 +20,7 @@ function App({initialTab}){
   <aside className={mobile?'side open':'side'}>
    <button className="close" onClick={()=>setMobile(false)}><X/></button>
    <div className="brand"><div className="brand-mark">G</div><div><b>GYOSAI</b><span>LEGAL EXAM INTELLIGENCE</span></div></div>
-   <nav>{tabs.map((t,i)=><button key={t} className={tab===t?'active':''} onClick={()=>{setTab(t);setMobile(false)}}>{[<Target/>,<BarChart3/>,<BookOpen/>,<Gauge/>,<Flag/>][i]}{t}</button>)}</nav>
+   <nav>{tabs.map((t,i)=><button key={t} className={tab===t?'active':''} onClick={()=>{setTab(t);setMobile(false)}}>{[<Target/>,<BarChart3/>,<BookOpen/>,<Gauge/>,<Flag/>,<BookOpen/>,<BarChart3/>,<BrainCircuit/>][i]}{t}</button>)}</nav>
    <div className="model-card"><div className="pulse"><BrainCircuit/></div><span>ANALYSIS MODEL</span><strong>Gyosei Forecast v1.0</strong><p>6年分・360問を対象に、科目配分と本文信号を統合。</p><div><i/>解析ステータス: ACTIVE</div></div>
    <p className="disclaimer"><ShieldCheck/>本サービスは学習支援用です。出題を保証するものではありません。</p>
   </aside>
@@ -30,6 +31,9 @@ function App({initialTab}){
    {tab==='予想問題'&&<Questions openQ={openQ} setOpenQ={setOpenQ}/>}
    {tab==='AI実力スコア'&&<Score/>}
    {tab==='合格作戦'&&<Strategy/>}
+   {tab==='教材を探す'&&<Materials key="catalog"/>}
+   {tab==='教材ランキング'&&<Materials key="ranking" mode="ranking"/>}
+   {tab==='教材診断'&&<Materials key="diagnosis" mode="diagnosis"/>}
   </main>
  </div>
 }
