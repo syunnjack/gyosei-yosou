@@ -3,3 +3,6 @@ dist/
 tmp/
 .npm-cache/
 .DS_Store
+
+# 記事ページは scripts/gen-article-pages.mjs がビルド前に作る
+/articles/

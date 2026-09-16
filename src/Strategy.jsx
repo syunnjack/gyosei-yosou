@@ -1,6 +1,7 @@
 import { BrainCircuit, CalendarDays, Flag, ShieldCheck, Target } from 'lucide-react'
 import { scoreMeta, scoreSubjects } from './score.js'
 import { daily, dontDo, downside, examDate, examDay, missPatterns, passLine, planRows, weeks } from './strategy.js'
+import './prose.css'
 import './strategy.css'
 
 const one = n => n.toFixed(1)

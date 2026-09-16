@@ -1,0 +1,27 @@
+/* 受験記 */
+.side nav a{border:0;background:transparent;color:#8fa49e;padding:13px 14px;border-radius:4px;text-align:left;display:flex;gap:12px;align-items:center;cursor:pointer;text-decoration:none;font-size:14px}
+.side nav a svg{width:18px}
+.side nav a.active{background:#233a35;color:white}
+.side nav a.active svg{color:#d59b49}
+.article-list{display:grid;gap:14px}
+.article-list article{background:#fff;border:1px solid #deddd6;padding:26px 30px}
+.article-list h3{font:600 16px/1.8 'Noto Serif JP';margin:10px 0 0;max-width:820px}
+.article-list h3 a{color:#1d2624;text-decoration:none}
+.article-list h3 a:hover{color:#8e682f}
+.article-list p{font-size:12px;line-height:2;color:#73807c;margin:10px 0 0;max-width:820px}
+.amuta{display:flex;align-items:center;gap:8px;font:10px 'DM Mono';color:#9aa3a0;margin:0}
+.amuta svg{width:13px}
+.amuta span{background:#e9efec;color:#45665d;padding:3px 8px;font-family:'Noto Sans JP'}
+.more{display:inline-flex;align-items:center;gap:5px;margin-top:14px;font-size:10px;color:#8e682f;text-decoration:none}
+.more svg{width:13px}
+.article .page-intro h2{font-size:26px;line-height:1.6;max-width:900px}
+.article .page-intro .amuta{margin:14px 0 12px}
+.article .panel h3{font:600 17px/1.8 'Noto Serif JP'}
+.article .panel-title{margin-bottom:18px}
+.related{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.related a{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.9;color:#42534e;text-decoration:none;max-width:820px}
+.related a:hover{color:#8e682f}
+.related svg{width:14px;flex:none;color:#9b7135;margin-top:3px}
+.back{margin-top:22px}
+.back a{font-size:11px;color:#8e682f;text-decoration:none}
+@media(max-width:600px){.article-list article{padding:22px 20px}.article .page-intro h2{font-size:20px}}

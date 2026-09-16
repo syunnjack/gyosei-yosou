@@ -1,0 +1,5 @@
+/* 記事と作戦ページで共通の本文・タグ */
+.para{font-size:13px;line-height:2;color:#42534e;margin:16px 0 0;max-width:820px}
+.para b{color:#1d2624}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.tags i{font-style:normal;font-size:10px;background:#f1ece3;color:#8c6a39;padding:6px 10px}
