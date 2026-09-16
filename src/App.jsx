@@ -3,24 +3,28 @@ import { Activity, ArrowUpRight, BarChart3, BookOpen, BrainCircuit, Check, Chevr
 import { forecastQuestions, predictions, subjects, years } from './data.js'
 import Strategy from './Strategy.jsx'
 import Materials from './Materials.jsx'
+import Account from './Account.jsx'
+import Admin from './Admin.jsx'
+import {PlatformProvider,usePlatform} from './platform.jsx'
 import './score.css'
 import { scoreAverageTotal, scoreGap, scoreMeta, scorePlan, scorePrevSnapshot, scorePrevSubjects, scoreSnapshots, scoreSubjects } from './score.js'
 
-const tabs=['予測レポート','出題分析','予想問題','AI実力スコア','合格作戦','教材を探す','教材ランキング','教材診断']
+const baseTabs=['予測レポート','出題分析','予想問題','AI実力スコア','合格作戦','教材を探す','教材ランキング','教材診断','マイページ']
 const one=n=>n.toFixed(1)
 const pct=(a,b)=>a/b*100
 const signed=n=>(n>=0?'+':'')+one(n)
 
 function Sparkline({values,color}){const max=Math.max(...values);const min=Math.min(...values);const points=values.map((v,i)=>`${i*24},${22-(v-min)/(max-min||1)*14}`).join(' ');return <svg className="spark" viewBox="0 0 120 28" aria-label="6年推移"><polyline points={points} fill="none" stroke={color} strokeWidth="2"/>{values.map((v,i)=><circle key={i} cx={i*24} cy={22-(v-min)/(max-min||1)*14} r="2.5" fill={color}/>)}</svg>}
 
-function App({initialTab}){
+function Shell({initialTab}){
+ const {user}=usePlatform(); const tabs=user?.role==='admin'?[...baseTabs,'管理画面']:baseTabs
  const [tab,setTab]=useState(initialTab||tabs[0]); const [subject,setSubject]=useState('すべて'); const [openQ,setOpenQ]=useState(null); const [mobile,setMobile]=useState(false)
  const filtered=useMemo(()=>subject==='すべて'?predictions:predictions.filter(p=>p.subject===subject),[subject])
  return <div className="app">
   <aside className={mobile?'side open':'side'}>
-   <button className="close" onClick={()=>setMobile(false)}><X/></button>
+   <button className="close" aria-label="メニューを閉じる" onClick={()=>setMobile(false)}><X/></button>
    <div className="brand"><div className="brand-mark">G</div><div><b>GYOSAI</b><span>LEGAL EXAM INTELLIGENCE</span></div></div>
-   <nav>{tabs.map((t,i)=><button key={t} className={tab===t?'active':''} onClick={()=>{setTab(t);setMobile(false)}}>{[<Target/>,<BarChart3/>,<BookOpen/>,<Gauge/>,<Flag/>,<BookOpen/>,<BarChart3/>,<BrainCircuit/>][i]}{t}</button>)}</nav>
+   <nav>{tabs.map((t,i)=><button key={t} className={tab===t?'active':''} onClick={()=>{setTab(t);setMobile(false)}}>{[<Target/>,<BarChart3/>,<BookOpen/>,<Gauge/>,<Flag/>,<BookOpen/>,<BarChart3/>,<BrainCircuit/>,<Activity/>,<Database/>][i]}{t}</button>)}</nav>
    <div className="model-card"><div className="pulse"><BrainCircuit/></div><span>ANALYSIS MODEL</span><strong>Gyosei Forecast v1.0</strong><p>6年分・360問を対象に、科目配分と本文信号を統合。</p><div><i/>解析ステータス: ACTIVE</div></div>
    <p className="disclaimer"><ShieldCheck/>本サービスは学習支援用です。出題を保証するものではありません。</p>
   </aside>
@@ -34,6 +38,8 @@ function App({initialTab}){
    {tab==='教材を探す'&&<Materials key="catalog"/>}
    {tab==='教材ランキング'&&<Materials key="ranking" mode="ranking"/>}
    {tab==='教材診断'&&<Materials key="diagnosis" mode="diagnosis"/>}
+   {tab==='マイページ'&&<Account/>}
+   {tab==='管理画面'&&<Admin/>}
   </main>
  </div>
 }
@@ -115,5 +121,5 @@ function Score(){return <div className="content">
  <div className="notice"><ShieldCheck/><div><b>スコアの前提</b><p>AI実力スコアは実際の得点・合格を保証するものではありません。行政書士試験は300点満点ですが、記述式（60点）が対象外のため、ここでは{scoreMeta.totalMax}点満点として扱っています。目標{scoreMeta.target}点も同じ基準です。</p></div></div>
  </div>}
 
-export default App
+export default function App(props){return <PlatformProvider><Shell {...props}/></PlatformProvider>}
 
