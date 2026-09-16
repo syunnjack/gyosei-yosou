@@ -7,6 +7,7 @@ export default defineConfig({
   // /gyosei-yosou/ 配下でも、独自ドメインのルート直下でも、
   // どちらに置いてもアセットを読める。
   base:'./',
+  server:{proxy:{'/api':{target:'http://127.0.0.1:8787',changeOrigin:false}}},
   build:{rollupOptions:{input:{
     main:resolve(import.meta.dirname,'index.html'),
     score:resolve(import.meta.dirname,'ai-score/index.html'),

@@ -1,1 +1,29 @@
-{"name":"gyosei-yosou","private":true,"version":"1.0.0","type":"module","scripts":{"dev":"vite","build":"vite build","preview":"vite preview","analyze":"python scripts/analyze_exams.py"},"dependencies":{"@vitejs/plugin-react":"latest","vite":"latest","react":"latest","react-dom":"latest","lucide-react":"latest"},"devDependencies":{}}
+{
+  "name": "gyosei-yosou",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "analyze": "python scripts/analyze_exams.py",
+    "server": "node --env-file-if-exists=.env server/start.js",
+    "start": "node --env-file-if-exists=.env server/start.js",
+    "admin": "node --env-file-if-exists=.env server/admin.js",
+    "test": "node --test src/materials.test.js server/platform.test.js",
+    "dev:full": "node server/dev.js",
+    "backup": "node --env-file-if-exists=.env server/backup.js"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "vite": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "lucide-react": "latest"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=24.14.0 <25"
+  }
+}
