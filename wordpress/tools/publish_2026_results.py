@@ -51,7 +51,7 @@ def api(method, path, **kw):
 CAT = {'mock': 5, 'strategy': 7, 'analysis': 9, 'study': 24}
 TAG = {'LEC': 16, '模試': 36, '成績表': 45, '行政書士': 25, '法令等': 35, '足切り': 31,
        '学習計画': 32, '記述式': 10, '行政法': 12, '基礎知識': 14, '文章理解': 39, '設問別正解率': 47,
-       '解き直し': 42, '過去問': 41}
+       '解き直し': 42, '過去問': 41, '通信講座': 26, 'スタディング': 21, '予算': 52}
 
 POSTS = [
     dict(slug='gyosei-shoshi-2026-exam-result-122', file='exam-122.html', date='2026-11-09T19:00:00',
@@ -70,7 +70,24 @@ POSTS = [
          title='間違いノートは学習の初期から作る｜LEC模試3回で同じ論点を落とし続けた記録',
          desc='行政書士の模試3回で、会社法の設立は3回とも、住民基本台帳法と国家賠償法1条は2回とも不正解だった。総合点しか残していなかった反省から、間違いノートを学習初期から付ける理由と、1問1行・7項目の書き方をまとめた。',
          cats=[CAT['study'], CAT['strategy']], tags=['解き直し', '過去問', '学習計画', '模試', '行政書士']),
+    dict(slug='goukaku-oiwaikin-henkin-hikaku-2027', file='oiwaikin-henkin-2027.html', date='2026-11-26T14:00:00',
+         title='行政書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件（アガルート・フォーサイト・スタディング）',
+         desc='2027年度（令和9年度）の行政書士試験に合格したら戻るお金を、公式ページで確認して比較。アガルートは全額返金か5万円、フォーサイトは1万円か受講料50%、スタディングは1万円分のギフト。返金とギフトの違い、顔出し・給付金併用などの条件も。',
+         cats=[CAT['strategy']], tags=['行政書士', '通信講座', 'スタディング', '予算'], affiliate=True),
 ]
+
+# アフィリエイトリンクは wordpress/content/affiliate-links.json に書く（例は affiliate-links.example.json）。
+# 本文の {{AFF_XXX}} を置き換える。1つでも空なら、その記事は投稿しない。
+AFF_FILE = os.path.join(HERE, '..', 'content', 'affiliate-links.json')
+
+
+def fill_affiliate(content):
+    links = json.load(open(AFF_FILE, encoding='utf-8')) if os.path.exists(AFF_FILE) else {}
+    missing = sorted(k for k in set(re.findall(r'\{\{(AFF_[A-Z0-9_]+)\}\}', content)) if not links.get(k))
+    for k, v in links.items():
+        if v:
+            content = content.replace('{{' + k + '}}', v)
+    return content, missing
 
 # ---------------------------------------------------------------- page edits
 LINK_LEC = '<a href="/lec-moshi-3kai-kojin-seisekihyo-2026/">LECの模試3回の個人成績表</a>'
@@ -179,6 +196,11 @@ def main():
     s = login()
     for p in POSTS:
         content = open(os.path.join(CONTENT, p['file']), encoding='utf-8').read()
+        if p.get('affiliate'):
+            content, missing = fill_affiliate(content)
+            if missing:
+                print('SKIP', p['slug'], '— affiliate-links.json に未設定:', ', '.join(missing))
+                continue
         found = api('GET', f"/posts?slug={p['slug']}&status=any&context=edit")
         body = {'slug': p['slug'], 'title': p['title'], 'content': content, 'status': 'publish',
                 'categories': p['cats'], 'tags': [TAG[t] for t in p['tags']],
