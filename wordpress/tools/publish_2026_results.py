@@ -87,11 +87,11 @@ POSTS = [
          desc='行政書士の模試3回で、会社法の設立は3回とも、住民基本台帳法と国家賠償法1条は2回とも不正解だった。総合点しか残していなかった反省から、間違いノートを学習初期から付ける理由と、1問1行・7項目の書き方をまとめた。',
          cats=[CAT['study'], CAT['strategy']], tags=['解き直し', '過去問', '学習計画', '模試', '行政書士']),
     dict(slug='goukaku-oiwaikin-henkin-hikaku-2027', file='oiwaikin-henkin-2027.html', date='2026-11-26T14:00:00',
-         title='行政書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件（アガルート・東京法経学院・フォーサイト・スタディング・LEC・TAC）',
+         title='行政書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件',
          desc='2027年度（令和9年度）の行政書士試験に合格したら戻るお金を、7社の公式ページで確認して比較。アガルートは全額返金か5万円、東京法経学院は一般学費で全額返金、フォーサイトは1万円か50%、スタディングは1万円分。LEC・TAC・伊藤塾の全額返金は2026年度合格者向け。',
          cats=[CAT['strategy']], tags=['行政書士', '通信講座', 'スタディング', '予算'], affiliate=True),
     dict(slug='shihoshi-goukaku-oiwaikin-henkin-2027', file='shihoshi-oiwaikin-henkin-2027.html', date='2026-11-26T23:50:00',
-         title='司法書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件（アガルート・東京法経学院・スタディング）',
+         title='司法書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件',
          desc='2027年度（令和9年度）の司法書士試験に合格したら戻るお金を公式ページで確認して比較。アガルートは全額返金か現金3万円、東京法経学院は総合コースで全額返金、スタディングは1万円分のギフト。LEC・TAC・伊藤塾・フォーサイト・クレアールは確認できた範囲も記載。',
          cats=[CAT['strategy']], tags=['通信講座', 'スタディング', '予算'], affiliate=True),
 ]
@@ -271,6 +271,127 @@ def apply_ops(raw, ops):
     return out, log
 
 
+# ---------------------------------------------------------------- SEO・スマホ最適化
+SNIPPET_FILE = os.path.join(HERE, '..', 'snippets', 'gy-seo-mobile.php')
+SNIPPET_NAME = 'gy-seo-mobile（SEO・スマホ最適化）'
+EYECATCH_DIR = os.path.join(HERE, 'eyecatch')
+FONT_B = r'C:\Windows\Fonts\YuGothB.ttc'
+FONT_R = r'C:\Windows\Fonts\YuGothM.ttc'
+
+
+def ensure_code_snippets():
+    """Code Snippets プラグイン（wordpress.org）を入れて有効にする。PHP をテーマを触らずに足すため。"""
+    r = s.get(API + '/plugins', params={'search': 'code-snippets'}, timeout=60)
+    if r.status_code >= 400:
+        print(f'  SKIP plugin: プラグイン一覧を読めない {r.status_code} {r.text[:150]}'); return False
+    have = [x for x in r.json() if x['plugin'].startswith('code-snippets/')]
+    if have and have[0]['status'] == 'active':
+        print('  OK   Code Snippets は有効'); return True
+    print('  Code Snippets を' + ('有効化' if have else 'インストールして有効化'))
+    if not APPLY:
+        return True
+    if have:
+        r = s.post(API + f"/plugins/{have[0]['plugin']}", json={'status': 'active'}, timeout=120)
+    else:
+        r = s.post(API + '/plugins', json={'slug': 'code-snippets', 'status': 'active'}, timeout=180)
+    if r.status_code >= 400:
+        print(f'  ERR  plugin {r.status_code} {r.text[:200]}'); return False
+    print('  -> Code Snippets 有効')
+    return True
+
+
+def upsert_snippet():
+    code = open(SNIPPET_FILE, encoding='utf-8').read()
+    code = re.sub(r'^<\?php\s*', '', code)  # Code Snippets は先頭の <?php なしで登録する
+    base = BASE + '/wp-json/code-snippets/v1/snippets'
+    r = s.get(base, timeout=60)
+    if r.status_code >= 400:
+        print(f'  SKIP snippet: Code Snippets の API が使えない {r.status_code}'); return
+    found = [x for x in r.json() if x.get('name') == SNIPPET_NAME]
+    body = {'name': SNIPPET_NAME, 'code': code, 'scope': 'global', 'active': True,
+            'desc': 'gyosei-yosou の SEO・スマホ最適化。リポジトリの wordpress/snippets/gy-seo-mobile.php と同じ内容。'}
+    print('  snippet', 'UPDATE' if found else 'CREATE', SNIPPET_NAME)
+    if not APPLY:
+        return
+    r = s.request('PUT' if found else 'POST', base + (f"/{found[0]['id']}" if found else ''), json=body, timeout=120)
+    if r.status_code >= 400:
+        print(f'  ERR  snippet {r.status_code} {r.text[:300]}'); return
+    sid = r.json().get('id')
+    s.post(base + f'/{sid}/activate', timeout=60)
+    print('  -> snippet 有効 id', sid)
+
+
+def make_eyecatch(title, label):
+    from PIL import Image, ImageDraw, ImageFont
+    W, H = 1200, 630
+    img = Image.new('RGB', (W, H), (31, 42, 68))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, W, 14], fill=(240, 160, 40))
+    fb = ImageFont.truetype(FONT_B, 62)
+    fs = ImageFont.truetype(FONT_R, 30)
+    d.rounded_rectangle([70, 80, 70 + d.textlength(label, font=fs) + 40, 132], radius=10, fill=(240, 160, 40))
+    d.text((90, 86), label, font=fs, fill=(31, 42, 68))
+    main, _, sub = title.partition('｜')
+    lines, cur = [], ''
+    for ch in main:
+        if d.textlength(cur + ch, font=fb) > W - 160 and cur:
+            lines.append(cur); cur = ch
+        else:
+            cur += ch
+    lines.append(cur)
+    y = 190
+    for ln in lines[:3]:
+        d.text((80, y), ln, font=fb, fill=(255, 255, 255)); y += 84
+    if sub:
+        fsub = ImageFont.truetype(FONT_R, 36)
+        sl, cur = [], ''
+        for ch in sub:
+            if d.textlength(cur + ch, font=fsub) > W - 160 and cur:
+                sl.append(cur); cur = ch
+            else:
+                cur += ch
+        sl.append(cur)
+        for ln in sl[:2]:
+            d.text((80, y + 12), ln, font=fsub, fill=(200, 208, 224)); y += 50
+    d.text((80, H - 70), 'gyosei-yosou.jp ｜ 資格試験はクイズで遊ぶ', font=fs, fill=(170, 180, 200))
+    os.makedirs(EYECATCH_DIR, exist_ok=True)
+    return img
+
+
+def ensure_eyecatches():
+    """アイキャッチ（OGP 画像）が無い記事に 1200x630 の画像を作って設定する。"""
+    labels = {5: '模試の記録', 7: '学習戦略', 9: '得点分析', 24: '学習記録', 6: '市販予想模試', 8: 'AI実力スコア'}
+    posts = api('GET', '/posts?per_page=100&status=publish&_fields=id,slug,title,featured_media,categories')
+    for p in posts:
+        if p['featured_media']:
+            continue
+        title = re.sub(r'<[^>]+>', '', p['title']['rendered'])
+        title = title.replace('&#8211;', '–').replace('&amp;', '&').replace('&#038;', '&')
+        label = next((labels[c] for c in p['categories'] if c in labels), '行政書士・司法書士')
+        print('  eyecatch', p['slug'])
+        if not APPLY:
+            continue
+        img = make_eyecatch(title, label)
+        path = os.path.join(EYECATCH_DIR, p['slug'] + '.png')
+        img.save(path, optimize=True)
+        with open(path, 'rb') as fh:
+            r = s.post(API + '/media', data=fh.read(), timeout=120, headers={
+                'Content-Type': 'image/png', 'Content-Disposition': f'attachment; filename=eyecatch-{p["slug"]}.png'})
+        if r.status_code >= 400:
+            print(f'  ERR  media {r.status_code} {r.text[:200]}'); continue
+        mid = r.json()['id']
+        api('POST', f'/media/{mid}', json={'alt_text': title})
+        api('POST', f"/posts/{p['id']}", json={'featured_media': mid})
+        print('  -> set', mid)
+
+
+def seo_phase():
+    print('SEO')
+    if ensure_code_snippets():
+        upsert_snippet()
+    ensure_eyecatches()
+
+
 def main():
     global s
     s = login()
@@ -314,6 +435,8 @@ def main():
     if APPLY and (cur.get('title'), cur.get('description')) != (SITE_TITLE, SITE_TAGLINE):
         api('POST', '/settings', json={'title': SITE_TITLE, 'description': SITE_TAGLINE})
         print('  -> site title / tagline updated')
+
+    seo_phase()
 
     print('done' if APPLY else 'dry run（書き込むときは --apply）')
 
