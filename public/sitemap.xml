@@ -21,6 +21,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://syunnjack.github.io/gyosei-yosou/articles/tenbou-reiwa9-gyosei-shihoshi/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://syunnjack.github.io/gyosei-yosou/articles/lec-moshi-3kai-kojin-seisekihyo-2026/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://syunnjack.github.io/gyosei-yosou/articles/shihoshi-exam-overview/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
