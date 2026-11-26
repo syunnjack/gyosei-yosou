@@ -95,15 +95,15 @@ POSTS = [
          title='司法書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件',
          desc='2027年度（令和9年度）の司法書士試験に合格したら戻るお金を公式ページで確認して比較。アガルートは全額返金か現金3万円、東京法経学院は総合コースで全額返金、スタディングは1万円分のギフト。LEC・TAC・伊藤塾・フォーサイト・クレアールは確認できた範囲も記載。',
          cats=[CAT['strategy']], tags=['通信講座', 'スタディング', '予算'], affiliate=True),
-    dict(slug='fudousan-kanteishi-gaiyou', file='fudousan-kanteishi-gaiyou.html', date='2026-11-27T10:00:00',
+    dict(slug='fudousan-kanteishi-gaiyou', file='fudousan-kanteishi-gaiyou.html', date='2026-11-27T07:00:00',
          title='不動産鑑定士試験の概要｜受験資格・試験科目・日程・合格率（令和8年の実績）',
          desc='不動産鑑定士試験は受験資格なし。短答式（5月・行政法規と鑑定理論）と論文式（8月・民法・経済学・会計学・鑑定理論）の2段階で、令和8年の合格率は短答37.4%・論文17.6%。受験手数料、短答免除、合格後の実務修習まで国土交通省の資料で確認した。',
          cats=[CAT['strategy']], tags=['資格試験', '学習計画', '民法']),
-    dict(slug='tochikaoku-chosashi-gaiyou', file='tochikaoku-chosashi-gaiyou.html', date='2026-11-27T10:30:00',
+    dict(slug='tochikaoku-chosashi-gaiyou', file='tochikaoku-chosashi-gaiyou.html', date='2026-11-27T07:05:00',
          title='土地家屋調査士試験の概要｜受験資格・午前の部の免除・日程・合格率',
          desc='土地家屋調査士試験は受験資格なし。筆記（10月・午前の部と午後の部）と口述（翌年1月）で、令和7年度の合格率は約10.1%。測量士補・建築士などで午前の部が免除される。受験手数料8,300円、令和8年度の日程を法務省の資料で確認した。',
          cats=[CAT['strategy']], tags=['資格試験', '学習計画', '民法']),
-    dict(slug='itojuku-hirabayashi-kunimoto', file='itojuku-hirabayashi-kunimoto.html', date='2026-11-27T11:00:00',
+    dict(slug='itojuku-hirabayashi-kunimoto', file='itojuku-hirabayashi-kunimoto.html', date='2026-11-27T07:10:00',
          title='伊藤塾 平林講師・国本講師の講座を受けて｜法的三段論法で「何となく解く」をやめた',
          desc='伊藤塾の平林講師・国本講師の講座で、全体像から問題文の生の主張へ寄せていく順番と、法的三段論法を教わった。何となく解いていた択一と記述を改め、司法書士試験もいけるかもと思えるようになった受講の感想。',
          cats=[CAT['study']], tags=['伊藤塾', '記述式', '民法', '行政書士']),
@@ -409,10 +409,32 @@ def ensure_eyecatches():
         print('  -> set', mid)
 
 
+
+def fix_countdown_widget():
+    """サイドバーの「本試験まで」ウィジェット（[gy_countdown]）を、司法書士試験に向ける。"""
+    r = s.get(API + '/widgets', params={'context': 'edit'}, timeout=60)
+    if r.status_code >= 400:
+        print(f'  SKIP widget: {r.status_code}'); return
+    for w in r.json():
+        inst = (w.get('instance') or {}).get('raw') or {}
+        text = inst.get('text') or inst.get('content') or ''
+        if '[gy_countdown]' not in text:
+            continue
+        key = 'text' if 'text' in inst else 'content'
+        inst[key] = text.replace('[gy_countdown]', '[gy_countdown date="2027-07-04" label="令和9年度 司法書士試験 筆記（予定）"]')
+        if 'title' in inst:
+            inst['title'] = '司法書士試験まで'
+        print('  widget', w['id'], '→ 司法書士試験まで')
+        if APPLY:
+            r2 = s.post(API + f"/widgets/{w['id']}", json={'instance': {'raw': inst}}, timeout=60)
+            print('  ->', r2.status_code if r2.status_code >= 400 else 'updated', r2.text[:150] if r2.status_code >= 400 else '')
+
+
 def seo_phase():
     print('SEO')
     if ensure_code_snippets():
         upsert_snippet()
+    fix_countdown_widget()
     ensure_eyecatches()
 
 

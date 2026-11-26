@@ -130,6 +130,12 @@ function gy_seo_filter_html( $html ) {
 		$head = preg_replace( '/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>\s*/i', '', $head );
 	}
 
+	// 4. 記事・固定ページの <title> のサイト名を短く（テーマが title を直接組み立てるため、ここで置き換える）
+	if ( is_singular() && ! is_front_page() ) {
+		$site = esc_html( get_bloginfo( 'name' ) );
+		$head = str_replace( ' - ' . $site . '</title>', ' - ' . esc_html( GY_SHORT_BRAND ) . '</title>', $head );
+	}
+
 	// 3. トップページ
 	if ( is_front_page() && ! is_paged() ) {
 		$title = esc_html( GY_HOME_TITLE );
