@@ -8,3 +8,4 @@ tmp/
 /articles/
 
 wordpress/tools/publish.log
+wordpress/content/affiliate-links.json

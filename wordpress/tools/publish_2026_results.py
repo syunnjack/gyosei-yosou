@@ -112,6 +112,8 @@ def fill_affiliate(content):
         official.append(key)
         return url
     content = re.sub(r'\{\{(AFF_[A-Z0-9_]+)\|([^}]+)\}\}', rep, content)
+    # {{AFFHTML_XXX}} はバナー・計測タグなどの HTML をそのまま入れる。未設定なら何も出さない
+    content = re.sub(r'\{\{(AFFHTML_[A-Z0-9_]+)\}\}', lambda m: links.get(m.group(1), ''), content)
     return content, sorted(set(official))
 
 # ---------------------------------------------------------------- page edits
