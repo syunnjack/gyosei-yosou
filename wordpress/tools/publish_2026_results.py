@@ -67,7 +67,8 @@ def api(method, path, **kw):
 CAT = {'mock': 5, 'strategy': 7, 'analysis': 9, 'study': 24}
 TAG = {'LEC': 16, '模試': 36, '成績表': 45, '行政書士': 25, '法令等': 35, '足切り': 31,
        '学習計画': 32, '記述式': 10, '行政法': 12, '基礎知識': 14, '文章理解': 39, '設問別正解率': 47,
-       '解き直し': 42, '過去問': 41, '通信講座': 26, 'スタディング': 21, '予算': 52}
+       '解き直し': 42, '過去問': 41, '通信講座': 26, 'スタディング': 21, '予算': 52,
+       '伊藤塾': 17, '民法': 13, '資格試験': 27}
 
 POSTS = [
     dict(slug='gyosei-shoshi-2026-exam-result-122', file='exam-122.html', date='2026-11-09T19:00:00',
@@ -94,6 +95,18 @@ POSTS = [
          title='司法書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件',
          desc='2027年度（令和9年度）の司法書士試験に合格したら戻るお金を公式ページで確認して比較。アガルートは全額返金か現金3万円、東京法経学院は総合コースで全額返金、スタディングは1万円分のギフト。LEC・TAC・伊藤塾・フォーサイト・クレアールは確認できた範囲も記載。',
          cats=[CAT['strategy']], tags=['通信講座', 'スタディング', '予算'], affiliate=True),
+    dict(slug='fudousan-kanteishi-gaiyou', file='fudousan-kanteishi-gaiyou.html', date='2026-11-27T10:00:00',
+         title='不動産鑑定士試験の概要｜受験資格・試験科目・日程・合格率（令和8年の実績）',
+         desc='不動産鑑定士試験は受験資格なし。短答式（5月・行政法規と鑑定理論）と論文式（8月・民法・経済学・会計学・鑑定理論）の2段階で、令和8年の合格率は短答37.4%・論文17.6%。受験手数料、短答免除、合格後の実務修習まで国土交通省の資料で確認した。',
+         cats=[CAT['strategy']], tags=['資格試験', '学習計画', '民法']),
+    dict(slug='tochikaoku-chosashi-gaiyou', file='tochikaoku-chosashi-gaiyou.html', date='2026-11-27T10:30:00',
+         title='土地家屋調査士試験の概要｜受験資格・午前の部の免除・日程・合格率',
+         desc='土地家屋調査士試験は受験資格なし。筆記（10月・午前の部と午後の部）と口述（翌年1月）で、令和7年度の合格率は約10.1%。測量士補・建築士などで午前の部が免除される。受験手数料8,300円、令和8年度の日程を法務省の資料で確認した。',
+         cats=[CAT['strategy']], tags=['資格試験', '学習計画', '民法']),
+    dict(slug='itojuku-hirabayashi-kunimoto', file='itojuku-hirabayashi-kunimoto.html', date='2026-11-27T11:00:00',
+         title='伊藤塾 平林講師・国本講師の講座を受けて｜法的三段論法で「何となく解く」をやめた',
+         desc='伊藤塾の平林講師・国本講師の講座で、全体像から問題文の生の主張へ寄せていく順番と、法的三段論法を教わった。何となく解いていた択一と記述を改め、司法書士試験もいけるかもと思えるようになった受講の感想。',
+         cats=[CAT['study']], tags=['伊藤塾', '記述式', '民法', '行政書士']),
 ]
 
 # アフィリエイトリンクは wordpress/content/affiliate-links.json に書く（例は affiliate-links.example.json）。
@@ -178,7 +191,9 @@ def ops_results():
 def ops_home():
     block = (f'<h2>2026年11月の更新</h2><ul><li>{LINK_122}</li><li>{LINK_LEC}（ファイナル112点・全日本第3回122点・ヤマ当て150点）</li>'
              f'<li>{LINK_TEN}｜記述0点で法令等122点を第一関門に置き、司法書士→行政書士の順で進める</li>'
-             '<li><a href="/machigai-note-gakushu-shoki/">間違いノートは学習の初期から作る</a></li></ul>')
+             '<li><a href="/machigai-note-gakushu-shoki/">間違いノートは学習の初期から作る</a></li>'
+             '<li><a href="/itojuku-hirabayashi-kunimoto/">伊藤塾 平林講師・国本講師の講座を受けて</a></li>'
+             '<li><a href="/fudousan-kanteishi-gaiyou/">不動産鑑定士試験の概要</a>／<a href="/tochikaoku-chosashi-gaiyou/">土地家屋調査士試験の概要</a></li></ul>')
     concept = ('<h2>このサイトのコンセプト：資格試験をクイズ・ゲームとして楽しむ</h2>'
                '<p>50代になって、気力と体力だけで机に向かう勉強は続かなくなりました。そこで資格試験を、<strong>クイズとゲームのつもりで遊ぶ</strong>ことにしています。</p>'
                '<ul>'
@@ -192,7 +207,16 @@ def ops_home():
         ('text', 'このページでは、次の挑戦と学習の状況を記録していきます。',
          'このサイトでは、次の挑戦をクイズとゲームのつもりで攻略していく記録を残します。'),
         ('insert_before', '<h2>次の目標は2つ</h2>', concept, 'このサイトのコンセプト'),
+        # 終わった行政書士試験のカウントダウンを、次の司法書士試験（筆記・例年7月第1日曜。令和9年度は未発表のため予定）に変える
+        ('text_all', '[gy_countdown]', '[gy_countdown date="2027-07-04" label="令和9年度 司法書士試験 筆記（予定）"]'),
+        ('text_unless', '<h2>このサイトのコンセプト', '<p><small>司法書士試験の日付は、例年の7月第1日曜から置いた予定です。令和9年度の日程は法務省の発表後に直します。</small></p>\n<h2>このサイトのコンセプト', '例年の7月第1日曜から置いた予定'),
         ('before', '<h2>試験日程・受験要項</h2>', block),
+        # 既にある「2026年11月の更新」欄に、あとから足した記事を追記する
+        ('text_unless', '間違いノートは学習の初期から作る</a></li>',
+         '間違いノートは学習の初期から作る</a></li>'
+         '<li><a href="/itojuku-hirabayashi-kunimoto/">伊藤塾 平林講師・国本講師の講座を受けて</a></li>'
+         '<li><a href="/fudousan-kanteishi-gaiyou/">不動産鑑定士試験の概要</a>／<a href="/tochikaoku-chosashi-gaiyou/">土地家屋調査士試験の概要</a></li>',
+         'itojuku-hirabayashi-kunimoto'),
     ]
 
 
