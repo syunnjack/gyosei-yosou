@@ -28,12 +28,28 @@ def login():
         'log': os.environ['WPU'], 'pwd': os.environ['WPP'], 'wp-submit': 'Log In',
         'redirect_to': BASE + '/wp-admin/', 'testcookie': '1'}, timeout=30)
     if 'wp-admin' not in r.url:
-        sys.exit(f'LOGIN FAILED {r.status_code} {r.url}')
-    html = s.get(BASE + '/wp-admin/', timeout=30).text
-    m = re.search(r'wpApiSettings\s*=\s*(\{.*?\});', html)
-    if not m:
+        err = re.search(r'id="login_error"[^>]*>(.*?)</div>', r.text, re.S)
+        msg = re.sub(r'<[^>]+>', '', err.group(1)).strip() if err else ''
+        sys.exit(f'LOGIN FAILED {r.status_code} {r.url} {msg}')
+    print('login OK')
+    # REST API の nonce。admin-ajax の rest-nonce（WP 5.3+）を先に使い、だめなら管理画面から拾う
+    nonce = None
+    r = s.get(BASE + '/wp-admin/admin-ajax.php', params={'action': 'rest-nonce'}, timeout=30)
+    if r.status_code == 200 and re.fullmatch(r'[0-9a-f]{10}', r.text.strip()):
+        nonce = r.text.strip()
+    for page in ('/wp-admin/', '/wp-admin/post-new.php', '/wp-admin/profile.php'):
+        if nonce:
+            break
+        m = re.search(r'wpApiSettings\s*=\s*(\{.*?\});', s.get(BASE + page, timeout=30).text)
+        if m:
+            nonce = json.loads(m.group(1))['nonce']
+    if not nonce:
         sys.exit('REST nonce が取れない')
-    s.headers['X-WP-Nonce'] = json.loads(m.group(1))['nonce']
+    s.headers['X-WP-Nonce'] = nonce
+    me = s.get(API + '/users/me', params={'context': 'edit'}, timeout=30)
+    if me.status_code != 200:
+        sys.exit(f'REST API で認証できない {me.status_code} {me.text[:200]}')
+    print('REST OK as', me.json().get('slug'), me.json().get('roles'))
     return s
 
 
