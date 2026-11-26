@@ -19,6 +19,38 @@ define( 'GY_HOME_TITLE', '資格試験をクイズ・ゲームとして楽しむ
 define( 'GY_HOME_DESC', '50代の受験生が、行政書士（5回目）と司法書士をクイズとゲームのつもりで攻略する記録。本試験・模試の得点、間違いノート、合格お祝い金・全額返金の比較を、良い数字も悪い数字もそのまま載せます。' );
 define( 'GY_SHORT_BRAND', '資格はクイズで遊ぶ' );
 
+// 0. カウントダウンの既定を、終わった行政書士試験から次の司法書士試験（筆記・予定）に変える。
+//    サイドバーの「本試験まで」ウィジェットは [gy_countdown] を日付なしで使っているため、既定値で切り替える。
+add_action(
+	'init',
+	function () {
+		if ( ! function_exists( 'gy_countdown_shortcode' ) ) {
+			return;
+		}
+		remove_shortcode( 'gy_countdown' );
+		add_shortcode(
+			'gy_countdown',
+			function ( $atts ) {
+				$atts = shortcode_atts(
+					array(
+						'date'  => '2027-07-04',
+						'label' => '令和9年度 司法書士試験 筆記（予定）',
+					),
+					(array) $atts
+				);
+				return gy_countdown_shortcode( $atts );
+			}
+		);
+	},
+	99
+);
+add_filter(
+	'widget_title',
+	function ( $title ) {
+		return ( '本試験まで' === $title ) ? '司法書士試験まで' : $title;
+	}
+);
+
 // 1. サイトマップ
 add_filter(
 	'wp_sitemaps_add_provider',
