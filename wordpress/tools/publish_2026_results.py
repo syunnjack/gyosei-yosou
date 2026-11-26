@@ -9,7 +9,7 @@
     $env:WPU='...'; $env:WPP='...'; python wordpress/tools/publish_2026_results.py
     python wordpress/tools/publish_2026_results.py --apply
 """
-import os, re, sys, json
+import os, re, sys, json, datetime
 import requests
 
 BASE = 'https://gyosei-yosou.jp'
@@ -452,7 +452,11 @@ def main():
                 'categories': p['cats'], 'tags': [TAG[t] for t in p['tags']],
                 'comment_status': 'closed', 'ping_status': 'closed', 'meta': {'st_description': p['desc']}}
         if not found:
-            body['date'] = p['date']
+            # 未来の日付だと予約投稿になって公開されない（2回やってしまった）。未来なら日付を付けずにいま公開する
+            if datetime.datetime.fromisoformat(p['date']) > datetime.datetime.now():
+                print('  日付が未来のため、いまの時刻で公開します:', p['date'])
+            else:
+                body['date'] = p['date']
         elif found[0].get('status') == 'future':
             # 予約投稿になってしまった記事は、いまの時刻で公開する
             body['date'] = None
