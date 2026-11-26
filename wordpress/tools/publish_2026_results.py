@@ -87,23 +87,32 @@ POSTS = [
          desc='行政書士の模試3回で、会社法の設立は3回とも、住民基本台帳法と国家賠償法1条は2回とも不正解だった。総合点しか残していなかった反省から、間違いノートを学習初期から付ける理由と、1問1行・7項目の書き方をまとめた。',
          cats=[CAT['study'], CAT['strategy']], tags=['解き直し', '過去問', '学習計画', '模試', '行政書士']),
     dict(slug='goukaku-oiwaikin-henkin-hikaku-2027', file='oiwaikin-henkin-2027.html', date='2026-11-26T14:00:00',
-         title='行政書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件（アガルート・フォーサイト・スタディング）',
-         desc='2027年度（令和9年度）の行政書士試験に合格したら戻るお金を、公式ページで確認して比較。アガルートは全額返金か5万円、フォーサイトは1万円か受講料50%、スタディングは1万円分のギフト。返金とギフトの違い、顔出し・給付金併用などの条件も。',
+         title='行政書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件（アガルート・東京法経学院・フォーサイト・スタディング・LEC・TAC）',
+         desc='2027年度（令和9年度）の行政書士試験に合格したら戻るお金を、7社の公式ページで確認して比較。アガルートは全額返金か5万円、東京法経学院は一般学費で全額返金、フォーサイトは1万円か50%、スタディングは1万円分。LEC・TAC・伊藤塾の全額返金は2026年度合格者向け。',
          cats=[CAT['strategy']], tags=['行政書士', '通信講座', 'スタディング', '予算'], affiliate=True),
+    dict(slug='shihoshi-goukaku-oiwaikin-henkin-2027', file='shihoshi-oiwaikin-henkin-2027.html', date='2026-11-27T09:00:00',
+         title='司法書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件（アガルート・東京法経学院・スタディング）',
+         desc='2027年度（令和9年度）の司法書士試験に合格したら戻るお金を公式ページで確認して比較。アガルートは全額返金か現金3万円、東京法経学院は総合コースで全額返金、スタディングは1万円分のギフト。LEC・TAC・伊藤塾・フォーサイト・クレアールは確認できた範囲も記載。',
+         cats=[CAT['strategy']], tags=['通信講座', 'スタディング', '予算'], affiliate=True),
 ]
 
 # アフィリエイトリンクは wordpress/content/affiliate-links.json に書く（例は affiliate-links.example.json）。
-# 本文の {{AFF_XXX}} を置き換える。1つでも空なら、その記事は投稿しない。
+# 本文の {{AFF_XXX|公式URL}} を置き換える。未設定のものは公式URLのまま公開し、あとで設定して再実行すれば差し替わる。
 AFF_FILE = os.path.join(HERE, '..', 'content', 'affiliate-links.json')
 
 
 def fill_affiliate(content):
     links = json.load(open(AFF_FILE, encoding='utf-8')) if os.path.exists(AFF_FILE) else {}
-    missing = sorted(k for k in set(re.findall(r'\{\{(AFF_[A-Z0-9_]+)\}\}', content)) if not links.get(k))
-    for k, v in links.items():
-        if v:
-            content = content.replace('{{' + k + '}}', v)
-    return content, missing
+    official = []
+
+    def rep(m):
+        key, url = m.group(1), m.group(2)
+        if links.get(key):
+            return links[key]
+        official.append(key)
+        return url
+    content = re.sub(r'\{\{(AFF_[A-Z0-9_]+)\|([^}]+)\}\}', rep, content)
+    return content, sorted(set(official))
 
 # ---------------------------------------------------------------- page edits
 LINK_LEC = '<a href="/lec-moshi-3kai-kojin-seisekihyo-2026/">LECの模試3回の個人成績表</a>'
@@ -241,10 +250,9 @@ def main():
     for p in POSTS:
         content = open(os.path.join(CONTENT, p['file']), encoding='utf-8').read()
         if p.get('affiliate'):
-            content, missing = fill_affiliate(content)
-            if missing:
-                print('SKIP', p['slug'], '— affiliate-links.json に未設定:', ', '.join(missing))
-                continue
+            content, official = fill_affiliate(content)
+            if official:
+                print('  公式URLのまま（アフィリエイト未設定）:', ', '.join(official))
         found = api('GET', f"/posts?slug={p['slug']}&status=any&context=edit")
         body = {'slug': p['slug'], 'title': p['title'], 'content': content, 'status': 'publish',
                 'categories': p['cats'], 'tags': [TAG[t] for t in p['tags']],

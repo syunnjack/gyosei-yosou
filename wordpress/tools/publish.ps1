@@ -14,14 +14,14 @@ $env:WPP = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropSe
 
 try {
     Write-Host "`n=== ドライラン（まだ何も書き込みません） ===" -ForegroundColor Cyan
-    python $script 2>&1 | Tee-Object -FilePath $log -Append
+    python $script 2>&1 | ForEach-Object { "$_"; "$_" | Out-File $log -Append -Encoding utf8 }
     if ($LASTEXITCODE -ne 0) { Write-Host "ドライランが失敗しました（終了コード $LASTEXITCODE）。publish.log を Claude に見せてください。" -ForegroundColor Red; return }
 
     $ans = Read-Host "`nこの内容でブログに反映しますか？ (y/N)"
     "answer: $ans" | Out-File $log -Append -Encoding utf8
     if ($ans -eq 'y') {
         Write-Host "`n=== 反映 ===" -ForegroundColor Cyan
-        python $script --apply 2>&1 | Tee-Object -FilePath $log -Append
+        python $script --apply 2>&1 | ForEach-Object { "$_"; "$_" | Out-File $log -Append -Encoding utf8 }
     } else {
         Write-Host '反映しませんでした。'
     }
