@@ -31,6 +31,11 @@ add_action(
 		add_shortcode(
 			'gy_countdown',
 			function ( $atts ) {
+				$atts = (array) $atts;
+				if ( empty( $atts['date'] ) ) {
+					// 日付なしの呼び出し（サイドバー等）は、名前だけ残っていても司法書士試験にそろえる
+					unset( $atts['label'] );
+				}
 				$atts = shortcode_atts(
 					array(
 						'date'  => '2027-07-04',
