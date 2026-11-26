@@ -165,7 +165,28 @@ def ops_home():
     block = (f'<h2>2026年11月の更新</h2><ul><li>{LINK_122}</li><li>{LINK_LEC}（ファイナル112点・全日本第3回122点・ヤマ当て150点）</li>'
              f'<li>{LINK_TEN}｜記述0点で法令等122点を第一関門に置き、司法書士→行政書士の順で進める</li>'
              '<li><a href="/machigai-note-gakushu-shoki/">間違いノートは学習の初期から作る</a></li></ul>')
-    return [('before', '<h2>試験日程・受験要項</h2>', block)]
+    concept = ('<h2>このサイトのコンセプト：資格試験をクイズ・ゲームとして楽しむ</h2>'
+               '<p>50代になって、気力と体力だけで机に向かう勉強は続かなくなりました。そこで資格試験を、<strong>クイズとゲームのつもりで遊ぶ</strong>ことにしています。</p>'
+               '<ul>'
+               '<li><strong>毎日がクイズ：</strong>移動時間や食事中に、スマホで一問一答・肢別問題を解く。机に向かうことを前提にしない</li>'
+               '<li><strong>模試はボス戦：</strong>点数・偏差値・順位を、ゲームのスコアとして記録する。良い数字も悪い数字もそのまま載せる</li>'
+               '<li><strong>スコアは毎日動かす：</strong>AI実力スコアは触らない日が続くと下がる。だから少しずつ毎日触る</li>'
+               '<li><strong>間違いはアイテム：</strong>落とした問題は<a href="/machigai-note-gakushu-shoki/">間違いノート</a>に集めて、次に出たときに取り返す</li>'
+               '</ul>'
+               '<p>いま攻略中のゲームは2つ。令和9年度の行政書士（5回目）と、新しく始めた司法書士です。</p>')
+    return [
+        ('text', 'このページでは、次の挑戦と学習の状況を記録していきます。',
+         'このサイトでは、次の挑戦をクイズとゲームのつもりで攻略していく記録を残します。'),
+        ('insert_before', '<h2>次の目標は2つ</h2>', concept, 'このサイトのコンセプト'),
+        ('before', '<h2>試験日程・受験要項</h2>', block),
+    ]
+
+
+# サイト名・キャッチフレーズ・トップページのタイトル（コンセプト変更）
+SITE_TITLE = '資格試験はクイズで遊ぶ｜行政書士・司法書士の攻略記録'
+SITE_TAGLINE = '行政書士・司法書士の試験を、クイズとゲームのつもりで楽しむ個人の攻略記録。模試の点数・順位・AIスコアを「ゲームの数字」として毎日動かしています。'
+HOME_TITLE = '資格試験をクイズ・ゲームとして楽しむ｜行政書士リベンジと司法書士の攻略記録'
+HOME_DESC = '50代の受験生が、行政書士（5回目）と司法書士をクイズとゲームのつもりで攻略する記録。移動時間の一問一答、模試はボス戦、AIスコアは毎日動かす。点数は良くても悪くてもそのまま載せます。'
 
 
 def apply_ops(raw, ops):
@@ -197,6 +218,13 @@ def apply_ops(raw, ops):
             if i < 0:
                 log.append('  SKIP note: 段落が無い'); continue
             out = out[:i + 4] + '\n' + op[1] + out[i + 4:]; log.append('  OK   note')
+        elif kind == 'insert_before':
+            if op[3] in out:
+                log.append(f'  SKIP insert {op[3]!r}: 既に入っている'); continue
+            n = out.count(op[1])
+            if n != 1:
+                log.append(f'  SKIP insert before {op[1]!r}: {n}件一致'); continue
+            out = out.replace(op[1], op[2] + '\n' + op[1]); log.append(f'  OK   insert {op[3]!r}')
         elif kind == 'before':
             if '2026年11月の更新' in out:
                 log.append('  SKIP home block: 既に入っている'); continue
@@ -233,9 +261,20 @@ def main():
         raw = page['content']['raw']
         new, log = apply_ops(raw, ops)
         print(f'PAGE {slug} (id {page["id"]})'); print('\n'.join(log))
-        if APPLY and new != raw:
-            api('POST', f'/pages/{page["id"]}', json={'content': new})
+        body = {'content': new} if new != raw else {}
+        if slug == 'home' and page['title']['raw'] != HOME_TITLE:
+            body.update(title=HOME_TITLE, meta={'st_description': HOME_DESC})
+            print(f'  title: {page["title"]["raw"]} -> {HOME_TITLE}')
+        if APPLY and body:
+            api('POST', f'/pages/{page["id"]}', json=body)
             print('  -> updated', page['link'])
+
+    cur = api('GET', '/settings')
+    print(f'SITE title: {cur.get("title")} -> {SITE_TITLE}')
+    print(f'SITE tagline: {cur.get("description")} -> {SITE_TAGLINE}')
+    if APPLY and (cur.get('title'), cur.get('description')) != (SITE_TITLE, SITE_TAGLINE):
+        api('POST', '/settings', json={'title': SITE_TITLE, 'description': SITE_TAGLINE})
+        print('  -> site title / tagline updated')
 
     print('done' if APPLY else 'dry run（書き込むときは --apply）')
 
