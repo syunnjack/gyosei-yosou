@@ -90,7 +90,7 @@ POSTS = [
          title='行政書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件（アガルート・東京法経学院・フォーサイト・スタディング・LEC・TAC）',
          desc='2027年度（令和9年度）の行政書士試験に合格したら戻るお金を、7社の公式ページで確認して比較。アガルートは全額返金か5万円、東京法経学院は一般学費で全額返金、フォーサイトは1万円か50%、スタディングは1万円分。LEC・TAC・伊藤塾の全額返金は2026年度合格者向け。',
          cats=[CAT['strategy']], tags=['行政書士', '通信講座', 'スタディング', '予算'], affiliate=True),
-    dict(slug='shihoshi-goukaku-oiwaikin-henkin-2027', file='shihoshi-oiwaikin-henkin-2027.html', date='2026-11-27T09:00:00',
+    dict(slug='shihoshi-goukaku-oiwaikin-henkin-2027', file='shihoshi-oiwaikin-henkin-2027.html', date='2026-11-26T23:50:00',
          title='司法書士の合格お祝い金・全額返金を比較｜2027年度合格で戻る額と条件（アガルート・東京法経学院・スタディング）',
          desc='2027年度（令和9年度）の司法書士試験に合格したら戻るお金を公式ページで確認して比較。アガルートは全額返金か現金3万円、東京法経学院は総合コースで全額返金、スタディングは1万円分のギフト。LEC・TAC・伊藤塾・フォーサイト・クレアールは確認できた範囲も記載。',
          cats=[CAT['strategy']], tags=['通信講座', 'スタディング', '予算'], affiliate=True),
@@ -161,11 +161,14 @@ def ops_results():
     exam = ('<tr><td>2026年11月8日</td><td>令和8年度 本試験（4回目）<br /><small>採点サービスによる点（公式ではない）。法令等86点で足切り122に−36。記述3問とも0点。</small></td>'
             '<td colspan="2">86（択一＋多肢）</td><td>0</td><td class="ok">36</td><td class="ng">122</td></tr>')
     return [
-        ('row', 'LEC ファイナル模試（自宅）', lambda row: final),
-        ('row', '2026年10月5日 提出', lambda row: row.replace('／LEC ファイナル模試', '') + exam),
+        # 2回目以降の実行で行が増えないよう、追加済みなら差し替えだけにする
+        ('dedupe', ['LEC 全日本行政書士公開模試 第3回<br', 'LEC 厳選！直前ヤマ当て模試<br', '令和8年度 本試験（4回目）']),
+        ('row_once', 'LEC ファイナル模試（自宅）', 'LEC 全日本行政書士公開模試 第3回<br', lambda row: final),
+        ('row_once', '2026年10月5日 提出', '令和8年度 本試験（4回目）', lambda row: row.replace('／LEC ファイナル模試', '') + exam),
         ('row', 'LEC ファイナル模試（9/25）', lambda row: '<tr><td>LEC ファイナル模試（9/25）</td>' + td('68', '16', '0', '<td><strong>84</strong></td>', '28', '112') + '</tr>'),
         ('row_re', r'<td>LEC ファイナル</td>\s*<td>101</td>', lambda row: '<tr><td>LEC ファイナル</td>' + td('84', '<td><strong>−38</strong></td>', '28', '+4') + '</tr>'),
-        ('text', '東京法経学院とLECファイナルの記述（28点・17点）は自己採点です。', '東京法経学院とLECファイナルの記述（28点・17点）は自己採点です。LECファイナルの記述は、のちに0点で返ってきました。'),
+        ('text_all', 'LECファイナルの記述は、のちに0点で返ってきました。LECファイナルの記述は、のちに0点で返ってきました。', 'LECファイナルの記述は、のちに0点で返ってきました。'),
+        ('text_unless', '東京法経学院とLECファイナルの記述（28点・17点）は自己採点です。', '東京法経学院とLECファイナルの記述（28点・17点）は自己採点です。LECファイナルの記述は、のちに0点で返ってきました。', 'のちに0点で返ってきました'),
         ('first_p', NOTE),
     ]
 
@@ -210,6 +213,28 @@ def apply_ops(raw, ops):
             m = rows[0]
             out = out[:m.start()] + op[2](m.group(0)) + out[m.end():]
             log.append(f'  OK   row {op[1]!r}')
+        elif kind == 'dedupe':
+            for key in op[1]:
+                rows = [m for m in ROW.finditer(out) if key in m.group(0)]
+                for m in reversed(rows[1:]):
+                    out = out[:m.start()] + out[m.end():]
+                log.append(f'  OK   dedupe {key!r}: {len(rows)}件→{min(len(rows), 1)}件')
+        elif kind == 'row_once':
+            if op[2] in out:
+                log.append(f'  SKIP row {op[1]!r}: 追加済み'); continue
+            rows = [m for m in ROW.finditer(out) if op[1] in m.group(0)]
+            if len(rows) != 1:
+                log.append(f'  SKIP row {op[1]!r}: {len(rows)}件一致'); continue
+            m = rows[0]
+            out = out[:m.start()] + op[3](m.group(0)) + out[m.end():]
+            log.append(f'  OK   row {op[1]!r}')
+        elif kind == 'text_unless':
+            if op[3] in out:
+                log.append(f'  SKIP text {op[1][:30]!r}: 反映済み'); continue
+            n = out.count(op[1])
+            if n != 1:
+                log.append(f'  SKIP text {op[1][:30]!r}: {n}件一致'); continue
+            out = out.replace(op[1], op[2]); log.append(f'  OK   text {op[1][:30]!r}')
         elif kind == 'text_all':
             n = out.count(op[1])
             if not n:
@@ -259,6 +284,10 @@ def main():
                 'comment_status': 'closed', 'ping_status': 'closed', 'meta': {'st_description': p['desc']}}
         if not found:
             body['date'] = p['date']
+        elif found[0].get('status') == 'future':
+            # 予約投稿になってしまった記事は、いまの時刻で公開する
+            body['date'] = None
+            body['date_gmt'] = None
         print(('UPDATE' if found else 'CREATE'), p['slug'])
         if APPLY:
             r = api('POST', f"/posts/{found[0]['id']}" if found else '/posts', json=body)
