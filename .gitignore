@@ -6,3 +6,7 @@ tmp/
 
 # 記事ページは scripts/gen-article-pages.mjs がビルド前に作る
 /articles/
+
+wordpress/tools/publish.log
+wordpress/content/affiliate-links.json
+wordpress/tools/eyecatch/

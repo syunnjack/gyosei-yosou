@@ -1,0 +1,37 @@
+# gyosei-yosou.jp（WordPress）へ記事とページの更新を反映する。
+# 資格情報はリポジトリの Actions secrets（WPU / WPP）から渡す。ログには出ない。
+name: wordpress-publish
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [content/2026-results-and-2027-outlook]
+    paths: [wordpress/**, .github/workflows/wordpress-publish.yml]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+      - name: secrets の確認
+        env:
+          WPU: ${{ secrets.WPU }}
+          WPP: ${{ secrets.WPP }}
+        run: |
+          if [ -z "$WPU" ] || [ -z "$WPP" ]; then
+            echo "::error::Actions secrets に WPU と WPP を登録してください"; exit 1
+          fi
+      - name: ドライラン
+        env:
+          WPU: ${{ secrets.WPU }}
+          WPP: ${{ secrets.WPP }}
+        run: python wordpress/tools/publish_2026_results.py
+      - name: 反映
+        env:
+          WPU: ${{ secrets.WPU }}
+          WPP: ${{ secrets.WPP }}
+        run: python wordpress/tools/publish_2026_results.py --apply

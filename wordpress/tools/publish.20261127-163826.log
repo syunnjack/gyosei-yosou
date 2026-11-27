@@ -1,0 +1,121 @@
+﻿=== 2026-11-27T10:26:16 start ===
+login OK
+REST OK as chitamaru ['administrator']
+UPDATE gyosei-shoshi-2026-exam-result-122
+UPDATE lec-moshi-3kai-kojin-seisekihyo-2026
+UPDATE tenbou-reiwa9-gyosei-shihoshi
+UPDATE machigai-note-gakushu-shoki
+  蜈ｬ蠑酋RL縺ｮ縺ｾ縺ｾ・医い繝輔ぅ繝ｪ繧ｨ繧､繝域悴險ｭ螳夲ｼ・ AFF_FORESIGHT, AFF_LEC, AFF_TAC, AFF_THG
+UPDATE goukaku-oiwaikin-henkin-hikaku-2027
+  蜈ｬ蠑酋RL縺ｮ縺ｾ縺ｾ・医い繝輔ぅ繝ｪ繧ｨ繧､繝域悴險ｭ螳夲ｼ・ AFF_THG_SHOSHI
+UPDATE shihoshi-goukaku-oiwaikin-henkin-2027
+UPDATE fudousan-kanteishi-gaiyou
+UPDATE tochikaoku-chosashi-gaiyou
+UPDATE itojuku-hirabayashi-kunimoto
+PAGE mock-exams (id 19)
+  OK   row 'mock-lec-5/'
+  OK   row 'mock-lec-6/'
+  OK   row 'mock-lec-7/'
+  SKIP text 'LEC 縺ｮ蜈ｨ譌･譛ｬ蜈ｬ髢区ｨ｡隧ｦ 隨ｬ2蝗槭・隨ｬ3蝗槭→繝､繝槫ｽ薙※讓｡隧ｦ縺ｯ蜿励￠': 0莉ｶ荳閾ｴ
+  SKIP text '縺・★繧後ｂ邨先棡蠕・■縺ｧ縺吶・: 0莉ｶ荳閾ｴ
+  SKIP text '譛ｬ隧ｦ鬨薙・11譛・譌･縺ｧ縲∵ｮ九ｊ縺ｯ34譌･縺ｧ縺吶・: 0莉ｶ荳閾ｴ
+  SKIP text '2026蟷ｴ11譛・譌･・域律・牙ｮ滓命莠亥ｮ壹〒縺吶・: 0莉ｶ荳閾ｴ
+  OK   text '譛ｬ險倬鹸縺ｧ縺ｯ LEC 7蝗槭・莨願陸蝪ｾ 1蝗槭・TAC 2蝗槭・譚ｱ莠ｬ豕・・・莉ｶ・・
+  SKIP note: 譌｢縺ｫ蜈･縺｣縺ｦ縺・ｋ
+PAGE results (id 20)
+  OK   dedupe 'LEC 蜈ｨ譌･譛ｬ陦梧帆譖ｸ螢ｫ蜈ｬ髢区ｨ｡隧ｦ 隨ｬ3蝗・br': 1莉ｶ竊・莉ｶ
+  OK   dedupe 'LEC 蜴ｳ驕ｸ・∫峩蜑阪Ζ繝槫ｽ薙※讓｡隧ｦ<br': 1莉ｶ竊・莉ｶ
+  OK   dedupe '莉､蜥・蟷ｴ蠎ｦ 譛ｬ隧ｦ鬨難ｼ・蝗樒岼・・: 1莉ｶ竊・莉ｶ
+  SKIP row 'LEC 繝輔ぃ繧､繝翫Ν讓｡隧ｦ・郁・螳・ｼ・: 霑ｽ蜉貂医∩
+  SKIP row '2026蟷ｴ10譛・譌･ 謠仙・': 霑ｽ蜉貂医∩
+  OK   row 'LEC 繝輔ぃ繧､繝翫Ν讓｡隧ｦ・・/25・・
+  SKIP row '<td>LEC 繝輔ぃ繧､繝翫Ν</td>\\s*<td>101</td>': 0莉ｶ荳閾ｴ
+  SKIP text 'LEC繝輔ぃ繧､繝翫Ν縺ｮ險倩ｿｰ縺ｯ縲√・縺｡縺ｫ0轤ｹ縺ｧ霑斐▲縺ｦ縺阪∪縺励◆縲・EC': 0莉ｶ荳閾ｴ
+  SKIP text '譚ｱ莠ｬ豕慕ｵ悟ｭｦ髯｢縺ｨLEC繝輔ぃ繧､繝翫Ν縺ｮ險倩ｿｰ・・8轤ｹ繝ｻ17轤ｹ・峨・閾ｪ蟾ｱ': 蜿肴丐貂医∩
+  SKIP note: 譌｢縺ｫ蜈･縺｣縺ｦ縺・ｋ
+PAGE home (id 18)
+  SKIP text '縺薙・繝壹・繧ｸ縺ｧ縺ｯ縲∵ｬ｡縺ｮ謖第姶縺ｨ蟄ｦ鄙偵・迥ｶ豕√ｒ險倬鹸縺励※縺・″縺ｾ縺吶・: 0莉ｶ荳閾ｴ
+  SKIP insert '縺薙・繧ｵ繧､繝医・繧ｳ繝ｳ繧ｻ繝励ヨ': 譌｢縺ｫ蜈･縺｣縺ｦ縺・ｋ
+  SKIP text '[gy_countdown]': 0莉ｶ荳閾ｴ
+  SKIP text '<h2>縺薙・繧ｵ繧､繝医・繧ｳ繝ｳ繧ｻ繝励ヨ': 蜿肴丐貂医∩
+  SKIP home block: 譌｢縺ｫ蜈･縺｣縺ｦ縺・ｋ
+  SKIP text '髢馴＆縺・ヮ繝ｼ繝医・蟄ｦ鄙偵・蛻晄悄縺九ｉ菴懊ｋ</a></li>': 蜿肴丐貂医∩
+PATCH mock-books title: 陦梧帆譖ｸ螢ｫ縺ｮ蟶りｲｩ莠域Φ讓｡隧ｦ繧定・蟾ｱ謗｡轤ｹ・・遉ｾ繧剃ｼ夂､ｾ蛻･縺ｫ豈碑ｼ・-> 陦梧帆譖ｸ螢ｫ縺ｮ蟶りｲｩ讓｡隧ｦ縺ｯ蠖薙◆繧具ｼ溽噪荳ｭ邇・ｈ繧雁､ｧ莠九↑縲檎せ縺ｮ縺壹ｌ縲搾ｽ・遉ｾ繧定・蟾ｱ謗｡轤ｹ縺励※豈碑ｼ・
+PATCH mock-books content
+  OK   insert '蟶りｲｩ讓｡隧ｦ縺ｮ縲檎噪荳ｭ邇・阪・縺ｩ縺・ｦ九ｋ縺・
+PATCH gyosei-shoshi-ashikiri-2tsu title: 陦梧帆譖ｸ螢ｫ縺ｮ雜ｳ蛻・ｊ縺ｯ2縺､縺ゅｋ・懈ｳ穂ｻ､遲・22轤ｹ縺ｯ閾ｪ蛻・〒雜ｳ縺・-> 陦梧帆譖ｸ螢ｫ隧ｦ鬨薙・雜ｳ蛻・ｊ縺ｯ2縺､・・80轤ｹ繧貞叙縺｣縺ｦ繧り誠縺｡繧九梧ｳ穂ｻ､遲・22轤ｹ縲阪・隕区婿
+PATCH gyosei-shoshi-moshi-osusume-2026 title: 陦梧帆譖ｸ螢ｫ縺ｮ讓｡隧ｦ縺翫☆縺吶ａ5驕ｸ・・026蟷ｴ蠎ｦ縺ｫ閾ｪ蛻・〒蜿励￠縺ｦ豈斐∋縺・-> 陦梧帆譖ｸ螢ｫ縺ｮ讓｡隧ｦ縺翫☆縺吶ａ5驕ｸ・懷・髢区ｨ｡隧ｦ縺ｨ蟶りｲｩ讓｡隧ｦ繧・026蟷ｴ蠎ｦ縺ｫ蜿励￠縺ｦ豈斐∋縺・
+SITE title: 雉・ｼ隧ｦ鬨薙・繧ｯ繧､繧ｺ縺ｧ驕翫・・懆｡梧帆譖ｸ螢ｫ繝ｻ蜿ｸ豕墓嶌螢ｫ縺ｮ謾ｻ逡･險倬鹸 -> 雉・ｼ隧ｦ鬨薙・繧ｯ繧､繧ｺ縺ｧ驕翫・・懆｡梧帆譖ｸ螢ｫ繝ｻ蜿ｸ豕墓嶌螢ｫ縺ｮ謾ｻ逡･險倬鹸
+SITE tagline: 陦梧帆譖ｸ螢ｫ繝ｻ蜿ｸ豕墓嶌螢ｫ縺ｮ隧ｦ鬨薙ｒ縲√け繧､繧ｺ縺ｨ繧ｲ繝ｼ繝縺ｮ縺､繧ゅｊ縺ｧ讌ｽ縺励・蛟倶ｺｺ縺ｮ謾ｻ逡･險倬鹸縲よｨ｡隧ｦ縺ｮ轤ｹ謨ｰ繝ｻ鬆・ｽ阪・AI繧ｹ繧ｳ繧｢繧偵後ご繝ｼ繝縺ｮ謨ｰ蟄励阪→縺励※豈取律蜍輔°縺励※縺・∪縺吶・-> 陦梧帆譖ｸ螢ｫ繝ｻ蜿ｸ豕墓嶌螢ｫ縺ｮ隧ｦ鬨薙ｒ縲√け繧､繧ｺ縺ｨ繧ｲ繝ｼ繝縺ｮ縺､繧ゅｊ縺ｧ讌ｽ縺励・蛟倶ｺｺ縺ｮ謾ｻ逡･險倬鹸縲よｨ｡隧ｦ縺ｮ轤ｹ謨ｰ繝ｻ鬆・ｽ阪・AI繧ｹ繧ｳ繧｢繧偵後ご繝ｼ繝縺ｮ謨ｰ蟄励阪→縺励※豈取律蜍輔°縺励※縺・∪縺吶・
+SEO
+  OK   Code Snippets 縺ｯ譛牙柑
+  snippet UPDATE gy-seo-mobile・・EO繝ｻ繧ｹ繝槭・譛驕ｩ蛹厄ｼ・
+dry run・域嶌縺崎ｾｼ繧縺ｨ縺阪・ --apply・・
+answer: y
+login OK
+REST OK as chitamaru ['administrator']
+UPDATE gyosei-shoshi-2026-exam-result-122
+  -> https://gyosei-yosou.jp/gyosei-shoshi-2026-exam-result-122/
+UPDATE lec-moshi-3kai-kojin-seisekihyo-2026
+  -> https://gyosei-yosou.jp/lec-moshi-3kai-kojin-seisekihyo-2026/
+UPDATE tenbou-reiwa9-gyosei-shihoshi
+  -> https://gyosei-yosou.jp/tenbou-reiwa9-gyosei-shihoshi/
+UPDATE machigai-note-gakushu-shoki
+  -> https://gyosei-yosou.jp/machigai-note-gakushu-shoki/
+  蜈ｬ蠑酋RL縺ｮ縺ｾ縺ｾ・医い繝輔ぅ繝ｪ繧ｨ繧､繝域悴險ｭ螳夲ｼ・ AFF_FORESIGHT, AFF_LEC, AFF_TAC, AFF_THG
+UPDATE goukaku-oiwaikin-henkin-hikaku-2027
+  -> https://gyosei-yosou.jp/goukaku-oiwaikin-henkin-hikaku-2027/
+  蜈ｬ蠑酋RL縺ｮ縺ｾ縺ｾ・医い繝輔ぅ繝ｪ繧ｨ繧､繝域悴險ｭ螳夲ｼ・ AFF_THG_SHOSHI
+UPDATE shihoshi-goukaku-oiwaikin-henkin-2027
+  -> https://gyosei-yosou.jp/shihoshi-goukaku-oiwaikin-henkin-2027/
+UPDATE fudousan-kanteishi-gaiyou
+  -> https://gyosei-yosou.jp/fudousan-kanteishi-gaiyou/
+UPDATE tochikaoku-chosashi-gaiyou
+  -> https://gyosei-yosou.jp/tochikaoku-chosashi-gaiyou/
+UPDATE itojuku-hirabayashi-kunimoto
+  -> https://gyosei-yosou.jp/itojuku-hirabayashi-kunimoto/
+PAGE mock-exams (id 19)
+  OK   row 'mock-lec-5/'
+  OK   row 'mock-lec-6/'
+  OK   row 'mock-lec-7/'
+  SKIP text 'LEC 縺ｮ蜈ｨ譌･譛ｬ蜈ｬ髢区ｨ｡隧ｦ 隨ｬ2蝗槭・隨ｬ3蝗槭→繝､繝槫ｽ薙※讓｡隧ｦ縺ｯ蜿励￠': 0莉ｶ荳閾ｴ
+  SKIP text '縺・★繧後ｂ邨先棡蠕・■縺ｧ縺吶・: 0莉ｶ荳閾ｴ
+  SKIP text '譛ｬ隧ｦ鬨薙・11譛・譌･縺ｧ縲∵ｮ九ｊ縺ｯ34譌･縺ｧ縺吶・: 0莉ｶ荳閾ｴ
+  SKIP text '2026蟷ｴ11譛・譌･・域律・牙ｮ滓命莠亥ｮ壹〒縺吶・: 0莉ｶ荳閾ｴ
+  OK   text '譛ｬ險倬鹸縺ｧ縺ｯ LEC 7蝗槭・莨願陸蝪ｾ 1蝗槭・TAC 2蝗槭・譚ｱ莠ｬ豕・・・莉ｶ・・
+  SKIP note: 譌｢縺ｫ蜈･縺｣縺ｦ縺・ｋ
+  -> updated https://gyosei-yosou.jp/mock-exams/
+PAGE results (id 20)
+  OK   dedupe 'LEC 蜈ｨ譌･譛ｬ陦梧帆譖ｸ螢ｫ蜈ｬ髢区ｨ｡隧ｦ 隨ｬ3蝗・br': 1莉ｶ竊・莉ｶ
+  OK   dedupe 'LEC 蜴ｳ驕ｸ・∫峩蜑阪Ζ繝槫ｽ薙※讓｡隧ｦ<br': 1莉ｶ竊・莉ｶ
+  OK   dedupe '莉､蜥・蟷ｴ蠎ｦ 譛ｬ隧ｦ鬨難ｼ・蝗樒岼・・: 1莉ｶ竊・莉ｶ
+  SKIP row 'LEC 繝輔ぃ繧､繝翫Ν讓｡隧ｦ・郁・螳・ｼ・: 霑ｽ蜉貂医∩
+  SKIP row '2026蟷ｴ10譛・譌･ 謠仙・': 霑ｽ蜉貂医∩
+  OK   row 'LEC 繝輔ぃ繧､繝翫Ν讓｡隧ｦ・・/25・・
+  SKIP row '<td>LEC 繝輔ぃ繧､繝翫Ν</td>\\s*<td>101</td>': 0莉ｶ荳閾ｴ
+  SKIP text 'LEC繝輔ぃ繧､繝翫Ν縺ｮ險倩ｿｰ縺ｯ縲√・縺｡縺ｫ0轤ｹ縺ｧ霑斐▲縺ｦ縺阪∪縺励◆縲・EC': 0莉ｶ荳閾ｴ
+  SKIP text '譚ｱ莠ｬ豕慕ｵ悟ｭｦ髯｢縺ｨLEC繝輔ぃ繧､繝翫Ν縺ｮ險倩ｿｰ・・8轤ｹ繝ｻ17轤ｹ・峨・閾ｪ蟾ｱ': 蜿肴丐貂医∩
+  SKIP note: 譌｢縺ｫ蜈･縺｣縺ｦ縺・ｋ
+PAGE home (id 18)
+  SKIP text '縺薙・繝壹・繧ｸ縺ｧ縺ｯ縲∵ｬ｡縺ｮ謖第姶縺ｨ蟄ｦ鄙偵・迥ｶ豕√ｒ險倬鹸縺励※縺・″縺ｾ縺吶・: 0莉ｶ荳閾ｴ
+  SKIP insert '縺薙・繧ｵ繧､繝医・繧ｳ繝ｳ繧ｻ繝励ヨ': 譌｢縺ｫ蜈･縺｣縺ｦ縺・ｋ
+  SKIP text '[gy_countdown]': 0莉ｶ荳閾ｴ
+  SKIP text '<h2>縺薙・繧ｵ繧､繝医・繧ｳ繝ｳ繧ｻ繝励ヨ': 蜿肴丐貂医∩
+  SKIP home block: 譌｢縺ｫ蜈･縺｣縺ｦ縺・ｋ
+  SKIP text '髢馴＆縺・ヮ繝ｼ繝医・蟄ｦ鄙偵・蛻晄悄縺九ｉ菴懊ｋ</a></li>': 蜿肴丐貂医∩
+PATCH mock-books title: 陦梧帆譖ｸ螢ｫ縺ｮ蟶りｲｩ莠域Φ讓｡隧ｦ繧定・蟾ｱ謗｡轤ｹ・・遉ｾ繧剃ｼ夂､ｾ蛻･縺ｫ豈碑ｼ・-> 陦梧帆譖ｸ螢ｫ縺ｮ蟶りｲｩ讓｡隧ｦ縺ｯ蠖薙◆繧具ｼ溽噪荳ｭ邇・ｈ繧雁､ｧ莠九↑縲檎せ縺ｮ縺壹ｌ縲搾ｽ・遉ｾ繧定・蟾ｱ謗｡轤ｹ縺励※豈碑ｼ・
+PATCH mock-books content
+  OK   insert '蟶りｲｩ讓｡隧ｦ縺ｮ縲檎噪荳ｭ邇・阪・縺ｩ縺・ｦ九ｋ縺・
+  -> updated https://gyosei-yosou.jp/mock-books/
+PATCH gyosei-shoshi-ashikiri-2tsu title: 陦梧帆譖ｸ螢ｫ縺ｮ雜ｳ蛻・ｊ縺ｯ2縺､縺ゅｋ・懈ｳ穂ｻ､遲・22轤ｹ縺ｯ閾ｪ蛻・〒雜ｳ縺・-> 陦梧帆譖ｸ螢ｫ隧ｦ鬨薙・雜ｳ蛻・ｊ縺ｯ2縺､・・80轤ｹ繧貞叙縺｣縺ｦ繧り誠縺｡繧九梧ｳ穂ｻ､遲・22轤ｹ縲阪・隕区婿
+  -> updated https://gyosei-yosou.jp/gyosei-shoshi-ashikiri-2tsu/
+PATCH gyosei-shoshi-moshi-osusume-2026 title: 陦梧帆譖ｸ螢ｫ縺ｮ讓｡隧ｦ縺翫☆縺吶ａ5驕ｸ・・026蟷ｴ蠎ｦ縺ｫ閾ｪ蛻・〒蜿励￠縺ｦ豈斐∋縺・-> 陦梧帆譖ｸ螢ｫ縺ｮ讓｡隧ｦ縺翫☆縺吶ａ5驕ｸ・懷・髢区ｨ｡隧ｦ縺ｨ蟶りｲｩ讓｡隧ｦ繧・026蟷ｴ蠎ｦ縺ｫ蜿励￠縺ｦ豈斐∋縺・
+  -> updated https://gyosei-yosou.jp/gyosei-shoshi-moshi-osusume-2026/
+SITE title: 雉・ｼ隧ｦ鬨薙・繧ｯ繧､繧ｺ縺ｧ驕翫・・懆｡梧帆譖ｸ螢ｫ繝ｻ蜿ｸ豕墓嶌螢ｫ縺ｮ謾ｻ逡･險倬鹸 -> 雉・ｼ隧ｦ鬨薙・繧ｯ繧､繧ｺ縺ｧ驕翫・・懆｡梧帆譖ｸ螢ｫ繝ｻ蜿ｸ豕墓嶌螢ｫ縺ｮ謾ｻ逡･險倬鹸
+SITE tagline: 陦梧帆譖ｸ螢ｫ繝ｻ蜿ｸ豕墓嶌螢ｫ縺ｮ隧ｦ鬨薙ｒ縲√け繧､繧ｺ縺ｨ繧ｲ繝ｼ繝縺ｮ縺､繧ゅｊ縺ｧ讌ｽ縺励・蛟倶ｺｺ縺ｮ謾ｻ逡･險倬鹸縲よｨ｡隧ｦ縺ｮ轤ｹ謨ｰ繝ｻ鬆・ｽ阪・AI繧ｹ繧ｳ繧｢繧偵後ご繝ｼ繝縺ｮ謨ｰ蟄励阪→縺励※豈取律蜍輔°縺励※縺・∪縺吶・-> 陦梧帆譖ｸ螢ｫ繝ｻ蜿ｸ豕墓嶌螢ｫ縺ｮ隧ｦ鬨薙ｒ縲√け繧､繧ｺ縺ｨ繧ｲ繝ｼ繝縺ｮ縺､繧ゅｊ縺ｧ讌ｽ縺励・蛟倶ｺｺ縺ｮ謾ｻ逡･險倬鹸縲よｨ｡隧ｦ縺ｮ轤ｹ謨ｰ繝ｻ鬆・ｽ阪・AI繧ｹ繧ｳ繧｢繧偵後ご繝ｼ繝縺ｮ謨ｰ蟄励阪→縺励※豈取律蜍輔°縺励※縺・∪縺吶・
+SEO
+  OK   Code Snippets 縺ｯ譛牙柑
+  snippet UPDATE gy-seo-mobile・・EO繝ｻ繧ｹ繝槭・譛驕ｩ蛹厄ｼ・
+  -> snippet 譛牙柑 id 5
+done
+=== 2026-11-27T10:27:01 end ===
