@@ -104,7 +104,7 @@ POSTS = [
          desc='土地家屋調査士試験は受験資格なし。筆記（10月・午前の部と午後の部）と口述（翌年1月）で、令和7年度の合格率は約10.1%。測量士補・建築士などで午前の部が免除される。受験手数料8,300円、令和8年度の日程を法務省の資料で確認した。',
          cats=[CAT['strategy']], tags=['資格試験', '学習計画', '民法']),
     dict(slug='itojuku-hirabayashi-kunimoto', file='itojuku-hirabayashi-kunimoto.html', date='2026-11-27T07:10:00',
-         title='伊藤塾 平林講師・国本講師の講座を受けて｜法的三段論法で「何となく解く」をやめた',
+         title='伊藤塾 行政書士講座の評判は？平林講師・国本講師の講座を受けた感想｜法的三段論法で「何となく解く」をやめた',
          desc='伊藤塾の平林講師・国本講師の講座で、全体像から問題文の生の主張へ寄せていく順番と、法的三段論法を教わった。何となく解いていた択一と記述を改め、司法書士試験もいけるかもと思えるようになった受講の感想。',
          cats=[CAT['study']], tags=['伊藤塾', '記述式', '民法', '行政書士']),
 ]
@@ -162,6 +162,8 @@ def ops_mock():
         ('text', 'いずれも結果待ちです。', 'このうちLECのファイナル模試は112点で返ってきました。ほかは結果待ちです。'),
         ('text', '本試験は11月8日で、残りは34日です。', ''),
         ('text_all', '2026年11月8日（日）実施予定です。', '2026年11月8日（日）に実施されました。'),
+        ('text_all', '本記録では LEC 7回・伊藤塾 1回・TAC 2回・東京法経学院 3回の計13回をすべて自宅受験で予定しています。複数校を受けることで出題の癖に偏らず、本番の初見問題への耐性を高めます。',
+         '2026年度は計13回を申し込みましたが、1回につき解く3時間と同じだけの復習時間が要り、復習が浅い回が出ました。復習まで終えられるのは5〜6回が現実的な上限だと感じています。'),
         ('first_p', NOTE),
     ]
 
@@ -438,6 +440,47 @@ def seo_phase():
     ensure_eyecatches()
 
 
+
+# ---------------------------------------------------------------- 既存ページ・記事の検索対策（サーチコンソールの検索語に合わせる）
+TEKICHU_FILE = os.path.join(CONTENT, 'mock-books-tekichu.html')
+PATCHES = [
+    dict(kind='pages', slug='mock-books',
+         title='行政書士の市販模試は当たる？的中率より大事な「点のずれ」｜5社を自己採点して比較',
+         desc='行政書士の市販予想模試（TAC・LEC・伊藤塾・大原・辰已など）を自己採点して会社別に比較。的中率の数字より、模試の点と本番の点のずれを見るべき理由を、3年分の実績で示す。何冊解けばいいかも。',
+         ops=lambda: [('insert_before', '<h2>古い年度の予想模試を使うときの注意</h2>',
+                       open(TEKICHU_FILE, encoding='utf-8').read(), '市販模試の「的中率」はどう見るか')]),
+    dict(kind='posts', slug='gyosei-shoshi-ashikiri-2tsu',
+         title='行政書士試験の足切りは2つ｜180点を取っても落ちる「法令等122点」の見方',
+         desc='行政書士試験は総得点180点だけでなく、法令等122点・基礎知識24点の足切りがある。法令等は成績表に出ないので自分で足す。4回中3回、法令等の足切りを割っていた実例から見方を整理した。'),
+    dict(kind='posts', slug='gyosei-shoshi-moshi-osusume-2026',
+         title='行政書士の模試おすすめ5選｜公開模試と市販模試を2026年度に受けて比べた',
+         desc='伊藤塾・TAC・LECの公開模試と、LEC・TACの市販直前予想模試を2026年度に自分で受けて比べた。模試はたくさん受けるより、復習できる数を選ぶ。'),
+]
+
+
+def patch_existing():
+    for p in PATCHES:
+        found = api('GET', f"/{p['kind']}?slug={p['slug']}&status=any&context=edit")
+        if not found:
+            print('  SKIP', p['slug'], ': 見つからない'); continue
+        item = found[0]
+        body = {}
+        if item['title']['raw'] != p['title']:
+            body['title'] = p['title']
+            print(f"PATCH {p['slug']} title: {item['title']['raw']} -> {p['title']}")
+        if p.get('desc'):
+            body['meta'] = {'st_description': p['desc']}
+        if p.get('ops'):
+            raw = item['content']['raw']
+            new, log = apply_ops(raw, p['ops']())
+            print(f"PATCH {p['slug']} content"); print('\n'.join(log))
+            if new != raw:
+                body['content'] = new
+        if APPLY and body:
+            api('POST', f"/{p['kind']}/{item['id']}", json=body)
+            print('  -> updated', item['link'])
+
+
 def main():
     global s
     s = login()
@@ -478,6 +521,8 @@ def main():
         if APPLY and body:
             api('POST', f'/pages/{page["id"]}', json=body)
             print('  -> updated', page['link'])
+
+    patch_existing()
 
     cur = api('GET', '/settings')
     print(f'SITE title: {cur.get("title")} -> {SITE_TITLE}')
